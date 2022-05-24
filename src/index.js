@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let isGoingRight = false;
   let leftTimerId;
   let rightTimerId;
+  let score = 0;
 
 
 
@@ -100,6 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
           !isJumping
         ) {
           console.log('landed');
+          score++;
           startPoint = doodlerBottomSpace;
           jump();
         }
@@ -110,8 +112,11 @@ document.addEventListener('DOMContentLoaded', () => {
   function gameOver() {
     console.log('game over');
     isGameOver = true;
+    grid.innerHTML = score;
     clearInterval(upTimerId);
     clearInterval(downTimerId);
+    clearInterval(leftTimerId);
+    clearInterval(rightTimerId);
   }
 
   function control(e) {
