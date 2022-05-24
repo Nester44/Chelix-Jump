@@ -198,6 +198,13 @@ document.addEventListener('DOMContentLoaded', () => {
     clearInterval(leftTimerId);
   }
 
+  function cheatSkin(e) {
+    if (e.code === 'BracketRight') {
+      doodler.style.backgroundImage = 'url(\'../img/cheat-face.png\')';
+      console.log('yeass');
+    }
+  }
+
 
 
   function start() {
@@ -209,6 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
       setInterval(movePlatforms, 30);
       jump();
       document.addEventListener('keyup', control);
+      document.addEventListener('keyup', cheatSkin);
     }
   }
 });
