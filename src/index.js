@@ -6,18 +6,22 @@ document.addEventListener('DOMContentLoaded', () => {
   // eslint-disable-next-line prefer-const
   let doodlerLeftSpace = 50;
   // eslint-disable-next-line prefer-const
-  let doodlerBottomSpace = 150;
+  let startPoint = 150;
+  let doodlerBottomSpace = startPoint;
   let isGameOver = false;
   // eslint-disable-next-line prefer-const
   let platformCount = 5;
   const platforms = [];
   let upTimerId;
   let downTimerId;
+  let isJumping = true;
+
 
 
   function createDoodler() {
     grid.appendChild(doodler);
     doodler.classList.add('doodler');
+    doodlerLeftSpace = platforms[0].left;
     doodler.style.left = doodlerLeftSpace + 'px';
     doodler.style.bottom = doodlerBottomSpace + 'px';
   }
@@ -58,16 +62,18 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   function jump() {
     clearInterval(downTimerId);
+    isJumping = true;
     upTimerId = setInterval(() => {
       doodlerBottomSpace += 20;
       doodler.style.bottom = doodlerBottomSpace + 'px';
-      if (doodlerBottomSpace > 350) {
+      if (doodlerBottomSpace > startPoint + 200) {
         fall();
       }
     }, 30);
   }
   function fall() {
     clearInterval(upTimerId);
+    isJumping = false;
     downTimerId = setInterval(() => {
       doodlerBottomSpace -= 5;
       doodler.style.bottom = doodlerBottomSpace + 'px';
@@ -109,7 +115,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function start() {
     if (!isGameOver) {
-      createDoodler();
       createPlatforms();
       createDoodler();
       setInterval(movePlatforms, 30);
