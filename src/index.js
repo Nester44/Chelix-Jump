@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
   startBtn.addEventListener('click', () => {
     if (!isGameOver)
       start();
+    startBtn.style.visibility = 'hidden';
   }
   );
 
