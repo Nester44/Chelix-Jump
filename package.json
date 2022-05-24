@@ -1,0 +1,19 @@
+{
+  "name": "doodle-jump",
+  "version": "1.0.0",
+  "description": "WEB version of the world-famous game Doodle Jump",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nester44/Doodle-Jump.git"
+  },
+  "author": "Nesterov Nikita",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Nester44/Doodle-Jump/issues"
+  },
+  "homepage": "https://github.com/Nester44/Doodle-Jump#readme"
+}
