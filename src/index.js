@@ -92,10 +92,10 @@ document.addEventListener('DOMContentLoaded', () => {
       platforms.forEach((platform) => {
         if (
           (doodlerBottomSpace >= platform.bottom) &&
-              (doodlerBottomSpace <= platform.bottom + platform.bottom + 15) &&
-              ((doodlerLeftSpace + 60) >= platform.left) &&
-              (doodlerLeftSpace <= (platform.left + 85)) &&
-              !isJumping
+          (doodlerBottomSpace <= platform.bottom + 15) &&
+          ((doodlerLeftSpace + 60) >= platform.left) &&
+          (doodlerLeftSpace <= (platform.left + 85)) &&
+          !isJumping
         ) {
           console.log('landed');
           startPoint = doodlerBottomSpace;
