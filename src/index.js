@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const isGameOver = false;
   // eslint-disable-next-line prefer-const
   let platformCount = 5;
+  const platforms = [];
 
 
   function createDoodler() {
@@ -40,6 +41,8 @@ document.addEventListener('DOMContentLoaded', () => {
       // eslint-disable-next-line prefer-const
       let newPlatBottom = 100 + i * platGap;
       const newPlatform = new Platform(newPlatBottom);
+      platforms.push(newPlatform);
+      console.log(platforms);
     }
   }
 
