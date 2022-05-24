@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let doodlerLeftSpace = 50;
   // eslint-disable-next-line prefer-const
   let doodlerBottomSpace = 150;
-  const isGameOver = false;
+  let isGameOver = false;
   // eslint-disable-next-line prefer-const
   let platformCount = 5;
   const platforms = [];
@@ -72,9 +72,16 @@ document.addEventListener('DOMContentLoaded', () => {
       doodlerBottomSpace -= 5;
       doodler.style.bottom = doodlerBottomSpace + 'px';
       if (doodlerBottomSpace <= 0) {
-        isGameOver();
+        gameOver();
       }
     }, 30);
+  }
+
+  function gameOver() {
+    console.log('game over');
+    isGameOver = true;
+    clearInterval(upTimerId);
+    clearInterval(downTimerId);
   }
 
   function start() {
