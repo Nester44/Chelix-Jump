@@ -84,6 +84,16 @@ document.addEventListener('DOMContentLoaded', () => {
     clearInterval(downTimerId);
   }
 
+  function control(e) {
+    if (e.key === 'ArrowLeft') {
+      //move left
+    } else if (e.key === 'ArrowRight') {
+      // move right
+    } else if (e.key === 'ArrowUp') {
+      // moveStraight
+    }
+  }
+
   function start() {
     if (!isGameOver) {
       createDoodler();
