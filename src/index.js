@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let isGameOver = false;
   let platformCount = 5;
   const platforms = [];
+  let platformSpeed = 4;
   let upTimerId;
   let downTimerId;
   let isJumping = true;
@@ -75,9 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function createPlatforms() {
     for (let i = 0; i < platformCount; i++) {
-      // eslint-disable-next-line prefer-const
       let platGap = 600 / platformCount;
-      // eslint-disable-next-line prefer-const
       let newPlatBottom = 100 + i * platGap;
       const newPlatform = new Platform(newPlatBottom);
       platforms.push(newPlatform);
@@ -87,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function movePlatforms() {
     if (doodlerBottomSpace > 200) {
       platforms.forEach((platform) => {
-        platform.bottom -= 4;
+        platform.bottom -= platformSpeed;
         const visual = platform.visual;
         visual.style.bottom = platform.bottom + 'px';
 
@@ -201,7 +200,6 @@ document.addEventListener('DOMContentLoaded', () => {
   function cheatSkin(e) {
     if (e.code === 'BracketRight') {
       doodler.style.backgroundImage = 'url(\'../img/cheat-face.png\')';
-      console.log('yeass');
     }
   }
 
