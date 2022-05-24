@@ -112,7 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (e.key === 'ArrowRight') {
       moveRight();
     } else if (e.key === 'ArrowUp') {
-      // moveStraight
+      moveStraight();
     }
   }
 
@@ -141,6 +141,13 @@ document.addEventListener('DOMContentLoaded', () => {
         doodler.style.left = doodlerLeftSpace + 'px';
       } else moveLeft();
     }, 30);
+  }
+
+  function moveStraight() {
+    isFounfRight = false;
+    isFounfLeft = false;
+    clearInterval(rightTimerId);
+    clearInterval(leftTimerId);
   }
 
   function start() {
