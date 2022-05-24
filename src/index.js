@@ -22,8 +22,8 @@ document.addEventListener('DOMContentLoaded', () => {
   let score = 0;
   const menuMusic = new Audio('../sounds/menuMusic.mp3');
   const gameMusic = new Audio('../sounds/gameMusic.mp3');
-  menuMusic.volume = 0.1;
-  gameMusic.volume = 0.1;
+  menuMusic.volume = 0.025;
+  gameMusic.volume = 0.025;
 
   startBtn.addEventListener('click', () => {
     if (!isGameOver)
@@ -31,24 +31,25 @@ document.addEventListener('DOMContentLoaded', () => {
     startBtn.style.visibility = 'hidden';
   }
   );
-  musicBtn.addEventListener('click', () => {
-    if (musicBtn.classList.contains('off')) {
-      onMenuMusic();
-    } else {
-      offMenuMusic();
-    }
-  });
-  function onMenuMusic() {
-    menuMusic.play();
+  function onMusic(sound) {
+    sound.play();
     musicBtn.classList.remove('off');
     musicBtn.classList.add('on');
   }
 
-  function offMenuMusic() {
-    menuMusic.pause();
+  function offMusic(sound) {
+    sound.pause();
     musicBtn.classList.remove('on');
     musicBtn.classList.add('off');
   }
+
+  musicBtn.addEventListener('click', () => {
+    if (musicBtn.classList.contains('off')) {
+      onMusic(menuMusic);
+    } else {
+      offMusic(menuMusic);
+    }
+  });
 
   function createDoodler() {
     grid.appendChild(doodler);
@@ -147,8 +148,8 @@ document.addEventListener('DOMContentLoaded', () => {
     clearInterval(downTimerId);
     clearInterval(leftTimerId);
     clearInterval(rightTimerId);
-    gameMusic.pause();
-    onMenuMusic();
+    offMusic(gameMusic);
+    onMusic(menuMusic);
   }
 
   function control(e) {
@@ -201,8 +202,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function start() {
     if (!isGameOver) {
-      gameMusic.play();
-      offMenuMusic();
+      offMusic(menuMusic);
+      onMusic(gameMusic);
       createPlatforms();
       createDoodler();
       setInterval(movePlatforms, 30);
