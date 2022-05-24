@@ -109,6 +109,8 @@ h6 {
     color: #2999e9;
     box-shadow: #16d9e3 0px 1px 15px 2px;
     border-radius: 5px;
+
+    overflow: hidden;
 }
 
 .doodler {
