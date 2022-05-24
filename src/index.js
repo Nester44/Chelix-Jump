@@ -1,11 +1,10 @@
+/* eslint-disable prefer-const */
 'use strict';
 
 document.addEventListener('DOMContentLoaded', () => {
   const grid = document.querySelector('.grid');
   const doodler = document.createElement('div');
-  // eslint-disable-next-line prefer-const
   let doodlerLeftSpace = 50;
-  // eslint-disable-next-line prefer-const
   let startPoint = 150;
   let doodlerBottomSpace = startPoint;
   let isGameOver = false;
@@ -15,6 +14,10 @@ document.addEventListener('DOMContentLoaded', () => {
   let upTimerId;
   let downTimerId;
   let isJumping = true;
+  let isGoingLeft = false;
+  let isGoingRight = false;
+  let leftTimerId;
+  let rightTimerId;
 
 
 
@@ -105,12 +108,39 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function control(e) {
     if (e.key === 'ArrowLeft') {
-      //move left
+      moveLeft();
     } else if (e.key === 'ArrowRight') {
-      // move right
+      moveRight();
     } else if (e.key === 'ArrowUp') {
       // moveStraight
     }
+  }
+
+  function moveLeft() {
+    if (isGoingRight) {
+      clearInterval(rightTimerId);
+      isGoingRight = false;
+    }
+    isGoingLeft = true;
+    leftTimerId = setInterval(() => {
+      if (doodlerLeftSpace >= 0) {
+        doodlerLeftSpace -= 5;
+        doodler.style.left = doodlerLeftSpace + 'px';
+      } else moveRight();
+    }, 30);
+  }
+  function moveRight() {
+    if (isGoingLeft) {
+      clearInterval(leftTimerId);
+      isGoingLeft = false;
+    }
+    isGoingRight = true;
+    rightTimerId = setInterval(() => {
+      if (doodlerLeftSpace <= 340) {
+        doodlerLeftSpace += 5;
+        doodler.style.left = doodlerLeftSpace + 'px';
+      } else moveLeft();
+    }, 30);
   }
 
   function start() {
@@ -119,6 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
       createDoodler();
       setInterval(movePlatforms, 30);
       jump();
+      document.addEventListener('keyup', control);
 
     }
   }
