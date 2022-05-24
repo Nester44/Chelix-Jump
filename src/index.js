@@ -98,6 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!isGameOver) {
       createDoodler();
       createPlatforms();
+      createDoodler();
       setInterval(movePlatforms, 30);
       jump();
 
