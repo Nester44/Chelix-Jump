@@ -1,2 +1,2 @@
 # Doodle-Jump
-Web version Doodle Jump game
+Web version of the Doodle Jump game
