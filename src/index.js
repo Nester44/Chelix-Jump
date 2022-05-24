@@ -4,6 +4,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   const grid = document.querySelector('.grid');
   const doodler = document.createElement('div');
+  const startBtn = document.querySelector('.btn');
   let doodlerLeftSpace = 50;
   let startPoint = 150;
   let doodlerBottomSpace = startPoint;
@@ -20,7 +21,11 @@ document.addEventListener('DOMContentLoaded', () => {
   let rightTimerId;
   let score = 0;
 
-
+  startBtn.addEventListener('click', () => {
+    if (!isGameOver)
+      start();
+  }
+  );
 
   function createDoodler() {
     grid.appendChild(doodler);
@@ -173,7 +178,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     }
   }
-  // attach to button
-  start();
+
 
 });
