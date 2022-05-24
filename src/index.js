@@ -3,8 +3,14 @@
 document.addEventListener('DOMContentLoaded', () => {
   const grid = document.querySelector('.grid');
   const doodler = document.createElement('div');
-  const doodlerLeftSpace = 50; // to let
-  const doodlerBottomSpace = 150; // to let
+  // eslint-disable-next-line prefer-const
+  let doodlerLeftSpace = 50;
+  // eslint-disable-next-line prefer-const
+  let doodlerBottomSpace = 150;
+  const isGameOver = false;
+  // eslint-disable-next-line prefer-const
+  let platformCount = 5;
+
 
   function createDoodler() {
     grid.appendChild(doodler);
@@ -12,5 +18,39 @@ document.addEventListener('DOMContentLoaded', () => {
     doodler.style.left = doodlerLeftSpace + 'px';
     doodler.style.bottom = doodlerBottomSpace + 'px';
   }
-  createDoodler();
+
+  class Platform {
+    constructor(newPlatBottom) {
+      this.bottom = newPlatBottom;
+      this.left = Math.random() * 315;
+      this.visual = document.createElement('div');
+
+      const visual = this.visual;
+      visual.classList.add('platform');
+      visual.style.left = this.left + 'px';
+      visual.style.bottom = this.bottom + 'px';
+      grid.appendChild(visual);
+    }
+  }
+
+  function createPlatforms() {
+    for (let i = 0; i < platformCount; i++) {
+      // eslint-disable-next-line prefer-const
+      let platGap = 600 / platformCount;
+      // eslint-disable-next-line prefer-const
+      let newPlatBottom = 100 + i * platGap;
+      const newPlatform = new Platform(newPlatBottom);
+    }
+  }
+
+  function start() {
+    if (isGameOver === false) {
+      createDoodler();
+      createPlatforms();
+
+    }
+  }
+  // attach to button
+  start();
+
 });
