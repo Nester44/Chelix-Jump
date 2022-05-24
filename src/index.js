@@ -4,12 +4,12 @@
 document.addEventListener('DOMContentLoaded', () => {
   const grid = document.querySelector('.grid');
   const doodler = document.createElement('div');
-  const startBtn = document.querySelector('.btn');
+  const startBtn = document.querySelector('.start-btn');
+  const musicBtn = document.querySelector('.play-music');
   let doodlerLeftSpace = 50;
   let startPoint = 150;
   let doodlerBottomSpace = startPoint;
   let isGameOver = false;
-  // eslint-disable-next-line prefer-const
   let platformCount = 5;
   const platforms = [];
   let upTimerId;
@@ -20,8 +20,10 @@ document.addEventListener('DOMContentLoaded', () => {
   let leftTimerId;
   let rightTimerId;
   let score = 0;
-  const audio = new Audio();
-  audio.src = '../sounds/gameMusic.mp3';
+  const menuMusic = new Audio('../sounds/menuMusic.mp3');
+  const gameMusic = new Audio('../sounds/gameMusic.mp3');
+  menuMusic.volume = 0.1;
+  gameMusic.volume = 0.1;
 
   startBtn.addEventListener('click', () => {
     if (!isGameOver)
@@ -29,6 +31,24 @@ document.addEventListener('DOMContentLoaded', () => {
     startBtn.style.visibility = 'hidden';
   }
   );
+  musicBtn.addEventListener('click', () => {
+    if (musicBtn.classList.contains('off')) {
+      onMenuMusic();
+    } else {
+      offMenuMusic();
+    }
+  });
+  function onMenuMusic() {
+    menuMusic.play();
+    musicBtn.classList.remove('off');
+    musicBtn.classList.add('on');
+  }
+
+  function offMenuMusic() {
+    menuMusic.pause();
+    musicBtn.classList.remove('on');
+    musicBtn.classList.add('off');
+  }
 
   function createDoodler() {
     grid.appendChild(doodler);
@@ -127,7 +147,8 @@ document.addEventListener('DOMContentLoaded', () => {
     clearInterval(downTimerId);
     clearInterval(leftTimerId);
     clearInterval(rightTimerId);
-    audio.pause();
+    gameMusic.pause();
+    onMenuMusic();
   }
 
   function control(e) {
@@ -180,15 +201,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function start() {
     if (!isGameOver) {
-      audio.play();
+      gameMusic.play();
+      offMenuMusic();
       createPlatforms();
       createDoodler();
       setInterval(movePlatforms, 30);
       jump();
       document.addEventListener('keyup', control);
-
     }
   }
-
-
 });
