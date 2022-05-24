@@ -11,6 +11,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // eslint-disable-next-line prefer-const
   let platformCount = 5;
   const platforms = [];
+  let upTimerId;
+  let downTimerId;
 
 
   function createDoodler() {
@@ -54,12 +56,33 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
   }
+  function jump() {
+    clearInterval(downTimerId);
+    upTimerId = setInterval(() => {
+      doodlerBottomSpace += 20;
+      doodler.style.bottom = doodlerBottomSpace + 'px';
+      if (doodlerBottomSpace > 350) {
+        fall();
+      }
+    }, 30);
+  }
+  function fall() {
+    clearInterval(upTimerId);
+    downTimerId = setInterval(() => {
+      doodlerBottomSpace -= 5;
+      doodler.style.bottom = doodlerBottomSpace + 'px';
+      if (doodlerBottomSpace <= 0) {
+        isGameOver();
+      }
+    }, 30);
+  }
 
   function start() {
     if (!isGameOver) {
       createDoodler();
       createPlatforms();
       setInterval(movePlatforms, 30);
+      jump();
 
     }
   }
