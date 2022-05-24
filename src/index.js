@@ -20,6 +20,8 @@ document.addEventListener('DOMContentLoaded', () => {
   let leftTimerId;
   let rightTimerId;
   let score = 0;
+  const audio = new Audio();
+  audio.src = '../sounds/gameMusic.mp3';
 
   startBtn.addEventListener('click', () => {
     if (!isGameOver)
@@ -125,6 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
     clearInterval(downTimerId);
     clearInterval(leftTimerId);
     clearInterval(rightTimerId);
+    audio.pause();
   }
 
   function control(e) {
@@ -173,15 +176,11 @@ document.addEventListener('DOMContentLoaded', () => {
     clearInterval(leftTimerId);
   }
 
-  function playMusic() {
-    const audio = new Audio();
-    audio.src = '../sounds/gameMusic.mp3';
-    audio.autoplay = true;
-  }
+
 
   function start() {
     if (!isGameOver) {
-      playMusic();
+      audio.play();
       createPlatforms();
       createDoodler();
       setInterval(movePlatforms, 30);
