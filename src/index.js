@@ -173,8 +173,15 @@ document.addEventListener('DOMContentLoaded', () => {
     clearInterval(leftTimerId);
   }
 
+  function playMusic() {
+    const audio = new Audio();
+    audio.src = '../sounds/gameMusic.mp3';
+    audio.autoplay = true;
+  }
+
   function start() {
     if (!isGameOver) {
+      playMusic();
       createPlatforms();
       createDoodler();
       setInterval(movePlatforms, 30);
