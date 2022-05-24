@@ -20,8 +20,8 @@ document.addEventListener('DOMContentLoaded', () => {
   let leftTimerId;
   let rightTimerId;
   let score = 0;
-  const menuMusic = new Audio('../sounds/menuMusic.mp3');
-  const gameMusic = new Audio('../sounds/gameMusic.mp3');
+  const menuMusic = new Audio('sounds/menuMusic.mp3');
+  const gameMusic = new Audio('sounds/gameMusic.mp3');
   menuMusic.volume = 0.1;
   gameMusic.volume = 0.1;
 
