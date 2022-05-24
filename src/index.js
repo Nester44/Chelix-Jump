@@ -79,8 +79,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
   function jump() {
-    clearInterval(downTimerId);
-    isJumping = true;
+    if (!isJumping) {
+      clearInterval(downTimerId);
+      isJumping = true;
+    }
     upTimerId = setInterval(() => {
       doodlerBottomSpace += 20;
       doodler.style.bottom = doodlerBottomSpace + 'px';
@@ -136,6 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function moveLeft() {
+    clearInterval(leftTimerId);
     if (isGoingRight) {
       clearInterval(rightTimerId);
       isGoingRight = false;
@@ -149,6 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 30);
   }
   function moveRight() {
+    clearInterval(rightTimerId);
     if (isGoingLeft) {
       clearInterval(leftTimerId);
       isGoingLeft = false;
