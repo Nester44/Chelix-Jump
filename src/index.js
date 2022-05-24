@@ -65,6 +65,8 @@ document.addEventListener('DOMContentLoaded', () => {
           let firstPlatform = platforms[0].visual;
           firstPlatform.classList.remove('platform');
           platforms.shift();
+          let newPlatform = new Platform(600);
+          platforms.push(newPlatform);
         }
       });
     }
@@ -150,8 +152,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function moveStraight() {
-    isFounfRight = false;
-    isFounfLeft = false;
+    isGoingRight = false;
+    isGoingLeft = false;
     clearInterval(rightTimerId);
     clearInterval(leftTimerId);
   }
