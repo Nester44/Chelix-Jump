@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const doodler = document.createElement('div');
   const startBtn = document.querySelector('.start-btn');
   const musicBtn = document.querySelector('.play-music');
+  const scoreLog = document.getElementById('score');
   let doodlerLeftSpace = 50;
   let startPoint = 150;
   let doodlerBottomSpace = startPoint;
@@ -15,11 +16,11 @@ document.addEventListener('DOMContentLoaded', () => {
   let platformSpeed = 4;
   let upTimerId;
   let downTimerId;
+  let leftTimerId;
+  let rightTimerId;
   let isJumping = true;
   let isGoingLeft = false;
   let isGoingRight = false;
-  let leftTimerId;
-  let rightTimerId;
   let score = 0;
   const menuMusic = new Audio('../sounds/menuMusic.mp3');
   const gameMusic = new Audio('../sounds/gameMusic.mp3');
@@ -132,6 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ) {
           console.log('landed');
           score++;
+          scoreLog.textContent = score;
           startPoint = doodlerBottomSpace;
           jump();
         }
@@ -213,6 +215,7 @@ document.addEventListener('DOMContentLoaded', () => {
       createDoodler();
       setInterval(movePlatforms, 30);
       jump();
+      scoreLog.textContent = score;
       document.addEventListener('keyup', control);
       document.addEventListener('keyup', cheatSkin);
     }
