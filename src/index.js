@@ -22,8 +22,8 @@ document.addEventListener('DOMContentLoaded', () => {
   let isGoingLeft = false;
   let isGoingRight = false;
   let score = 0;
-  const menuMusic = new Audio('../sounds/menuMusic.mp3');
-  const gameMusic = new Audio('../sounds/gameMusic.mp3');
+  const menuMusic = new Audio('./sounds/menuMusic.mp3');
+  const gameMusic = new Audio('./sounds/gameMusic.mp3');
   menuMusic.volume = 0.025;
   gameMusic.volume = 0.025;
 
