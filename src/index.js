@@ -11,7 +11,8 @@ document.addEventListener('DOMContentLoaded', () => {
   let doodlerLeftSpace = 50;
   let doodlerBottomSpace = startPoint;
   let doodlerJumpSpeed = 20;
-  let doodlerFallSpeed = 5;
+  let doodlerStartFallSpeed = 5;
+  let doodlerFallSpeed = doodlerStartFallSpeed;
   let isGameOver = false;
   let platformCount = 5;
   const platforms = [];
@@ -121,6 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
     isJumping = false;
     downTimerId = setInterval(() => {
       doodlerBottomSpace -= doodlerFallSpeed;
+      doodlerFallSpeed *= 1.03;
       doodler.style.bottom = doodlerBottomSpace + 'px';
       if (doodlerBottomSpace <= 0) {
         gameOver();
@@ -134,6 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
           !isJumping
         ) {
           console.log('landed');
+          doodlerFallSpeed = doodlerStartFallSpeed;
           score++;
           scoreLog.textContent = score;
           startPoint = doodlerBottomSpace;
