@@ -8,16 +8,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const musicBtn = document.querySelector('.play-music');
   const scoreLog = document.getElementById('score');
   const moveFrequency = 30;
-  let startPoint = 150;
-  let doodlerLeftSpace = 50;
-  let doodlerBottomSpace = startPoint;
   let doodlerJumpSpeed = 20;
   let doodlerStartFallSpeed = 5;
   let doodlerFallSpeed = doodlerStartFallSpeed;
+  let doodlerHorizontalSpeed = 5;
+  let platformSpeed = 4;
+  let startPoint = 150;
+  let doodlerLeftSpace = 50;
+  let doodlerBottomSpace = startPoint;
   let isGameOver = false;
   let platformCount = 5;
   const platforms = [];
-  let platformSpeed = 4;
   let upTimerId;
   let downTimerId;
   let leftTimerId;
@@ -178,7 +179,7 @@ document.addEventListener('DOMContentLoaded', () => {
     isGoingLeft = true;
     leftTimerId = setInterval(() => {
       if (doodlerLeftSpace >= 0) {
-        doodlerLeftSpace -= 5;
+        doodlerLeftSpace -= doodlerHorizontalSpeed;
         doodler.style.left = doodlerLeftSpace + 'px';
       } else moveRight();
     }, moveFrequency);
@@ -192,7 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
     isGoingRight = true;
     rightTimerId = setInterval(() => {
       if (doodlerLeftSpace <= 340) {
-        doodlerLeftSpace += 5;
+        doodlerLeftSpace += doodlerHorizontalSpeed;
         doodler.style.left = doodlerLeftSpace + 'px';
       } else moveLeft();
     }, moveFrequency);
