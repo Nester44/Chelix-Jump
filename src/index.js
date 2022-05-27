@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const startBtn = document.querySelector('.start-btn');
   const musicBtn = document.querySelector('.play-music');
   const scoreLog = document.getElementById('score');
+  const moveFrequency = 30;
   let startPoint = 150;
   let doodlerLeftSpace = 50;
   let doodlerBottomSpace = startPoint;
@@ -115,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (doodlerBottomSpace > startPoint + 200) {
         fall();
       }
-    }, 30);
+    }, moveFrequency);
   }
   function fall() {
     clearInterval(upTimerId);
@@ -143,7 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
           jump();
         }
       });
-    }, 30);
+    }, moveFrequency);
   }
 
   function gameOver() {
@@ -180,7 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
         doodlerLeftSpace -= 5;
         doodler.style.left = doodlerLeftSpace + 'px';
       } else moveRight();
-    }, 30);
+    }, moveFrequency);
   }
   function moveRight() {
     clearInterval(rightTimerId);
@@ -194,7 +195,7 @@ document.addEventListener('DOMContentLoaded', () => {
         doodlerLeftSpace += 5;
         doodler.style.left = doodlerLeftSpace + 'px';
       } else moveLeft();
-    }, 30);
+    }, moveFrequency);
   }
 
   function moveStraight() {
@@ -218,7 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
       onMusic(gameMusic);
       createPlatforms();
       createDoodler();
-      setInterval(movePlatforms, 30);
+      setInterval(movePlatforms, moveFrequency);
       jump();
       scoreLog.textContent = score;
       document.addEventListener('keyup', control);
