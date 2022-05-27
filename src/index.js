@@ -7,9 +7,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const startBtn = document.querySelector('.start-btn');
   const musicBtn = document.querySelector('.play-music');
   const scoreLog = document.getElementById('score');
-  let doodlerLeftSpace = 50;
   let startPoint = 150;
+  let doodlerLeftSpace = 50;
   let doodlerBottomSpace = startPoint;
+  let doodlerJumpSpeed = 20;
+  let doodlerFallSpeed = 5;
   let isGameOver = false;
   let platformCount = 5;
   const platforms = [];
@@ -24,8 +26,8 @@ document.addEventListener('DOMContentLoaded', () => {
   let score = 0;
   const menuMusic = new Audio('./sounds/menuMusic.mp3');
   const gameMusic = new Audio('./sounds/gameMusic.mp3');
-  menuMusic.volume = 0.025;
-  gameMusic.volume = 0.025;
+  menuMusic.volume = 0.1;
+  gameMusic.volume = 0.1;
 
   startBtn.addEventListener('click', () => {
     if (!isGameOver)
@@ -107,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
       isJumping = true;
     }
     upTimerId = setInterval(() => {
-      doodlerBottomSpace += 20;
+      doodlerBottomSpace += doodlerJumpSpeed;
       doodler.style.bottom = doodlerBottomSpace + 'px';
       if (doodlerBottomSpace > startPoint + 200) {
         fall();
@@ -118,7 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
     clearInterval(upTimerId);
     isJumping = false;
     downTimerId = setInterval(() => {
-      doodlerBottomSpace -= 5;
+      doodlerBottomSpace -= doodlerFallSpeed;
       doodler.style.bottom = doodlerBottomSpace + 'px';
       if (doodlerBottomSpace <= 0) {
         gameOver();
