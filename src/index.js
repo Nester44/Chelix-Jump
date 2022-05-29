@@ -61,7 +61,8 @@ class Game {
     this.doodlerFallSpeed = this.doodlerStartFallSpeed;
     this.acceleration = 1.025;
     this.doodlerHorizontalSpeed = 2.5;
-    this.platformSpeed = 2.5;
+    this.platformStartSpeed = 2.5;
+    this.platformSpeed = this.platformStartSpeed;
 
     this.upTimerId;
     this.downTimerId;
@@ -100,6 +101,9 @@ class Game {
   movePlatforms() {
     if (this.doodlerBottomSpace > 200) {
       this.platforms.forEach((platform) => {
+        if (this.doodlerBottomSpace > 500) {
+          this.platformSpeed = this.platformStartSpeed * 1.5;
+        } else this.platformSpeed = this.platformStartSpeed;
         platform.bottom -= this.platformSpeed;
         const visual = platform.visual;
         visual.style.bottom = platform.bottom + 'px';
