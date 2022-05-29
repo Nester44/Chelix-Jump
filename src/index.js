@@ -7,17 +7,21 @@ document.addEventListener('DOMContentLoaded', () => {
   const startBtn = document.querySelector('.start-btn');
   const musicBtn = document.querySelector('.play-music');
   const scoreLog = document.getElementById('score');
-  const moveFrequency = 30;
-  let doodlerJumpSpeed = 20;
-  let doodlerStartFallSpeed = 5;
+
+  const moveFrequency = 15;
+  let doodlerJumpSpeed = 10;
+  let doodlerStartFallSpeed = 2.5;
   let doodlerFallSpeed = doodlerStartFallSpeed;
-  let doodlerHorizontalSpeed = 5;
-  let platformSpeed = 4;
+  const acceleration = 1.025;
+  let doodlerHorizontalSpeed = 2.5;
+  let platformSpeed = 2.5;
+
   let startPoint = 150;
   let doodlerLeftSpace = 50;
   let doodlerBottomSpace = startPoint;
   let isGameOver = false;
   let platformCount = 5;
+
   const platforms = [];
   let upTimerId;
   let downTimerId;
@@ -27,8 +31,10 @@ document.addEventListener('DOMContentLoaded', () => {
   let isGoingLeft = false;
   let isGoingRight = false;
   let score = 0;
+
   const menuMusic = new Audio('./sounds/menuMusic.mp3');
   const gameMusic = new Audio('./sounds/gameMusic.mp3');
+  let currentMusic;
   menuMusic.volume = 0.1;
   gameMusic.volume = 0.1;
 
@@ -40,12 +46,13 @@ document.addEventListener('DOMContentLoaded', () => {
   );
   function onMusic(sound) {
     sound.play();
+    currentMusic = sound;
     musicBtn.classList.remove('off');
     musicBtn.classList.add('on');
   }
 
-  function offMusic(sound) {
-    sound.pause();
+  function offMusic() {
+    currentMusic.pause();
     musicBtn.classList.remove('on');
     musicBtn.classList.add('off');
   }
@@ -54,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (musicBtn.classList.contains('off')) {
       onMusic(menuMusic);
     } else {
-      offMusic(menuMusic);
+      offMusic();
     }
   });
 
@@ -124,7 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
     isJumping = false;
     downTimerId = setInterval(() => {
       doodlerBottomSpace -= doodlerFallSpeed;
-      doodlerFallSpeed *= 1.03;
+      doodlerFallSpeed *= acceleration;
       doodler.style.bottom = doodlerBottomSpace + 'px';
       if (doodlerBottomSpace <= 0) {
         gameOver();
@@ -156,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
     clearInterval(downTimerId);
     clearInterval(leftTimerId);
     clearInterval(rightTimerId);
-    offMusic(gameMusic);
+    offMusic();
     onMusic(menuMusic);
   }
 
@@ -216,7 +223,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function start() {
     if (!isGameOver) {
-      offMusic(menuMusic);
+      if (currentMusic) offMusic();
       onMusic(gameMusic);
       createPlatforms();
       createDoodler();
