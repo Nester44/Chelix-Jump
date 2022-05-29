@@ -117,7 +117,7 @@ h6 {
     overflow: hidden;
 }
 
-#score {
+.score {
     color: rgb(196, 0, 0);
     font-size: 24px;
     position: absolute;

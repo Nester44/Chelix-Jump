@@ -4,7 +4,7 @@
 const grid = document.querySelector('.grid');
 const startBtn = document.querySelector('.start-btn');
 const musicBtn = document.querySelector('.play-music');
-const scoreLog = document.getElementById('score');
+// const scoreLog = document.getElementById('score');
 
 
 const menuMusic = new Audio('./sounds/menuMusic.mp3');
@@ -51,6 +51,9 @@ class Platform {
 class Game {
   constructor() {
     this.doodler = document.createElement('div');
+    this.scoreLog = document.createElement('div');
+    this.scoreLog.classList.add('score');
+
 
     this.moveFrequency = 15;
     this.doodlerJumpSpeed = 10;
@@ -146,7 +149,7 @@ class Game {
           console.log('landed');
           this.doodlerFallSpeed = this.doodlerStartFallSpeed;
           this.score++;
-          scoreLog.textContent = this.score;
+          this.scoreLog.textContent = this.score;
           this.startPoint = this.doodlerBottomSpace;
           this.jump();
         }
@@ -228,9 +231,10 @@ class Game {
       onMusic(gameMusic);
       this.createPlatforms();
       this.createDoodler();
+      grid.append(this.scoreLog);
       setInterval(() => this.movePlatforms(), this.moveFrequency);
       this.jump();
-      scoreLog.textContent = this.score;
+      this.scoreLog.textContent = this.score;
       document.addEventListener('keyup', (e) => this.control(e));
       document.addEventListener('keyup', this.cheatSkin);
     }
@@ -238,6 +242,7 @@ class Game {
 }
 
 startBtn.addEventListener('click', () => {
+  grid.innerHTML = ''; // removing score
   window.game = new Game();
   window.game.start();
   console.log(window.game);
