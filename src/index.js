@@ -1,237 +1,235 @@
 /* eslint-disable prefer-const */
 'use strict';
 
-document.addEventListener('DOMContentLoaded', () => {
-  const grid = document.querySelector('.grid');
-  const doodler = document.createElement('div');
-  const startBtn = document.querySelector('.start-btn');
-  const musicBtn = document.querySelector('.play-music');
-  const scoreLog = document.getElementById('score');
+const grid = document.querySelector('.grid');
+const doodler = document.createElement('div');
+const startBtn = document.querySelector('.start-btn');
+const musicBtn = document.querySelector('.play-music');
+const scoreLog = document.getElementById('score');
 
-  const moveFrequency = 15;
-  let doodlerJumpSpeed = 10;
-  let doodlerStartFallSpeed = 2.5;
-  let doodlerFallSpeed = doodlerStartFallSpeed;
-  const acceleration = 1.025;
-  let doodlerHorizontalSpeed = 2.5;
-  let platformSpeed = 2.5;
+const moveFrequency = 15;
+let doodlerJumpSpeed = 10;
+let doodlerStartFallSpeed = 2.5;
+let doodlerFallSpeed = doodlerStartFallSpeed;
+const acceleration = 1.025;
+let doodlerHorizontalSpeed = 2.5;
+let platformSpeed = 2.5;
 
-  let startPoint = 150;
-  let doodlerLeftSpace = 50;
-  let doodlerBottomSpace = startPoint;
-  let isGameOver = false;
-  let platformCount = 5;
+let startPoint = 150;
+let doodlerLeftSpace = 50;
+let doodlerBottomSpace = startPoint;
+let isGameOver = false;
+let platformCount = 5;
 
-  const platforms = [];
-  let upTimerId;
-  let downTimerId;
-  let leftTimerId;
-  let rightTimerId;
-  let isJumping = true;
-  let isGoingLeft = false;
-  let isGoingRight = false;
-  let score = 0;
+const platforms = [];
+let upTimerId;
+let downTimerId;
+let leftTimerId;
+let rightTimerId;
+let isJumping = true;
+let isGoingLeft = false;
+let isGoingRight = false;
+let score = 0;
 
-  const menuMusic = new Audio('./sounds/menuMusic.mp3');
-  const gameMusic = new Audio('./sounds/gameMusic.mp3');
-  let currentMusic;
-  menuMusic.volume = 0.1;
-  gameMusic.volume = 0.1;
+const menuMusic = new Audio('./sounds/menuMusic.mp3');
+const gameMusic = new Audio('./sounds/gameMusic.mp3');
+let currentMusic;
+menuMusic.volume = 0.1;
+gameMusic.volume = 0.1;
 
-  startBtn.addEventListener('click', () => {
-    if (!isGameOver)
-      start();
-    startBtn.style.visibility = 'hidden';
+startBtn.addEventListener('click', () => {
+  if (!isGameOver)
+    start();
+  startBtn.style.visibility = 'hidden';
+}
+);
+function onMusic(sound) {
+  sound.play();
+  currentMusic = sound;
+  musicBtn.classList.remove('off');
+  musicBtn.classList.add('on');
+}
+
+function offMusic() {
+  currentMusic.pause();
+  musicBtn.classList.remove('on');
+  musicBtn.classList.add('off');
+}
+
+musicBtn.addEventListener('click', () => {
+  if (musicBtn.classList.contains('off')) {
+    onMusic(menuMusic);
+  } else {
+    offMusic();
   }
-  );
-  function onMusic(sound) {
-    sound.play();
-    currentMusic = sound;
-    musicBtn.classList.remove('off');
-    musicBtn.classList.add('on');
+});
+
+function createDoodler() {
+  grid.appendChild(doodler);
+  doodler.classList.add('doodler');
+  doodlerLeftSpace = platforms[0].left;
+  doodler.style.left = doodlerLeftSpace + 'px';
+  doodler.style.bottom = doodlerBottomSpace + 'px';
+}
+
+class Platform {
+  constructor(newPlatBottom) {
+    this.bottom = newPlatBottom;
+    this.left = Math.random() * 315;
+    this.visual = document.createElement('div');
+
+    const visual = this.visual;
+    visual.classList.add('platform');
+    visual.style.left = this.left + 'px';
+    visual.style.bottom = this.bottom + 'px';
+    grid.appendChild(visual);
   }
+}
 
-  function offMusic() {
-    currentMusic.pause();
-    musicBtn.classList.remove('on');
-    musicBtn.classList.add('off');
+function createPlatforms() {
+  for (let i = 0; i < platformCount; i++) {
+    let platGap = 600 / platformCount;
+    let newPlatBottom = 100 + i * platGap;
+    const newPlatform = new Platform(newPlatBottom);
+    platforms.push(newPlatform);
+    console.log(platforms);
   }
+}
+function movePlatforms() {
+  if (doodlerBottomSpace > 200) {
+    platforms.forEach((platform) => {
+      platform.bottom -= platformSpeed;
+      const visual = platform.visual;
+      visual.style.bottom = platform.bottom + 'px';
 
-  musicBtn.addEventListener('click', () => {
-    if (musicBtn.classList.contains('off')) {
-      onMusic(menuMusic);
-    } else {
-      offMusic();
-    }
-  });
-
-  function createDoodler() {
-    grid.appendChild(doodler);
-    doodler.classList.add('doodler');
-    doodlerLeftSpace = platforms[0].left;
-    doodler.style.left = doodlerLeftSpace + 'px';
+      if (platform.bottom < 10) {
+        let firstPlatform = platforms[0].visual;
+        firstPlatform.classList.remove('platform');
+        platforms.shift();
+        let newPlatform = new Platform(600);
+        platforms.push(newPlatform);
+      }
+    });
+  }
+}
+function jump() {
+  if (!isJumping) {
+    clearInterval(downTimerId);
+    isJumping = true;
+  }
+  upTimerId = setInterval(() => {
+    doodlerBottomSpace += doodlerJumpSpeed;
     doodler.style.bottom = doodlerBottomSpace + 'px';
-  }
-
-  class Platform {
-    constructor(newPlatBottom) {
-      this.bottom = newPlatBottom;
-      this.left = Math.random() * 315;
-      this.visual = document.createElement('div');
-
-      const visual = this.visual;
-      visual.classList.add('platform');
-      visual.style.left = this.left + 'px';
-      visual.style.bottom = this.bottom + 'px';
-      grid.appendChild(visual);
+    if (doodlerBottomSpace > startPoint + 200) {
+      fall();
     }
-  }
-
-  function createPlatforms() {
-    for (let i = 0; i < platformCount; i++) {
-      let platGap = 600 / platformCount;
-      let newPlatBottom = 100 + i * platGap;
-      const newPlatform = new Platform(newPlatBottom);
-      platforms.push(newPlatform);
-      console.log(platforms);
+  }, moveFrequency);
+}
+function fall() {
+  clearInterval(upTimerId);
+  isJumping = false;
+  downTimerId = setInterval(() => {
+    doodlerBottomSpace -= doodlerFallSpeed;
+    doodlerFallSpeed *= acceleration;
+    doodler.style.bottom = doodlerBottomSpace + 'px';
+    if (doodlerBottomSpace <= 0) {
+      gameOver();
     }
-  }
-  function movePlatforms() {
-    if (doodlerBottomSpace > 200) {
-      platforms.forEach((platform) => {
-        platform.bottom -= platformSpeed;
-        const visual = platform.visual;
-        visual.style.bottom = platform.bottom + 'px';
-
-        if (platform.bottom < 10) {
-          let firstPlatform = platforms[0].visual;
-          firstPlatform.classList.remove('platform');
-          platforms.shift();
-          let newPlatform = new Platform(600);
-          platforms.push(newPlatform);
-        }
-      });
-    }
-  }
-  function jump() {
-    if (!isJumping) {
-      clearInterval(downTimerId);
-      isJumping = true;
-    }
-    upTimerId = setInterval(() => {
-      doodlerBottomSpace += doodlerJumpSpeed;
-      doodler.style.bottom = doodlerBottomSpace + 'px';
-      if (doodlerBottomSpace > startPoint + 200) {
-        fall();
-      }
-    }, moveFrequency);
-  }
-  function fall() {
-    clearInterval(upTimerId);
-    isJumping = false;
-    downTimerId = setInterval(() => {
-      doodlerBottomSpace -= doodlerFallSpeed;
-      doodlerFallSpeed *= acceleration;
-      doodler.style.bottom = doodlerBottomSpace + 'px';
-      if (doodlerBottomSpace <= 0) {
-        gameOver();
-      }
-      platforms.forEach((platform) => {
-        if (
-          (doodlerBottomSpace >= platform.bottom) &&
+    platforms.forEach((platform) => {
+      if (
+        (doodlerBottomSpace >= platform.bottom) &&
           (doodlerBottomSpace <= platform.bottom + 15) &&
           ((doodlerLeftSpace + 60) >= platform.left) &&
           (doodlerLeftSpace <= (platform.left + 85)) &&
           !isJumping
-        ) {
-          console.log('landed');
-          doodlerFallSpeed = doodlerStartFallSpeed;
-          score++;
-          scoreLog.textContent = score;
-          startPoint = doodlerBottomSpace;
-          jump();
-        }
-      });
-    }, moveFrequency);
-  }
+      ) {
+        console.log('landed');
+        doodlerFallSpeed = doodlerStartFallSpeed;
+        score++;
+        scoreLog.textContent = score;
+        startPoint = doodlerBottomSpace;
+        jump();
+      }
+    });
+  }, moveFrequency);
+}
 
-  function gameOver() {
-    console.log('game over');
-    isGameOver = true;
-    grid.innerHTML = score;
-    clearInterval(upTimerId);
-    clearInterval(downTimerId);
-    clearInterval(leftTimerId);
+function gameOver() {
+  console.log('game over');
+  isGameOver = true;
+  grid.innerHTML = score;
+  clearInterval(upTimerId);
+  clearInterval(downTimerId);
+  clearInterval(leftTimerId);
+  clearInterval(rightTimerId);
+  offMusic();
+  onMusic(menuMusic);
+}
+
+function control(e) {
+  if (e.key === 'ArrowLeft') {
+    moveLeft();
+  } else if (e.key === 'ArrowRight') {
+    moveRight();
+  } else if (e.key === 'ArrowUp') {
+    moveStraight();
+  }
+}
+
+function moveLeft() {
+  clearInterval(leftTimerId);
+  if (isGoingRight) {
     clearInterval(rightTimerId);
-    offMusic();
-    onMusic(menuMusic);
-  }
-
-  function control(e) {
-    if (e.key === 'ArrowLeft') {
-      moveLeft();
-    } else if (e.key === 'ArrowRight') {
-      moveRight();
-    } else if (e.key === 'ArrowUp') {
-      moveStraight();
-    }
-  }
-
-  function moveLeft() {
-    clearInterval(leftTimerId);
-    if (isGoingRight) {
-      clearInterval(rightTimerId);
-      isGoingRight = false;
-    }
-    isGoingLeft = true;
-    leftTimerId = setInterval(() => {
-      if (doodlerLeftSpace >= 0) {
-        doodlerLeftSpace -= doodlerHorizontalSpeed;
-        doodler.style.left = doodlerLeftSpace + 'px';
-      } else moveRight();
-    }, moveFrequency);
-  }
-  function moveRight() {
-    clearInterval(rightTimerId);
-    if (isGoingLeft) {
-      clearInterval(leftTimerId);
-      isGoingLeft = false;
-    }
-    isGoingRight = true;
-    rightTimerId = setInterval(() => {
-      if (doodlerLeftSpace <= 340) {
-        doodlerLeftSpace += doodlerHorizontalSpeed;
-        doodler.style.left = doodlerLeftSpace + 'px';
-      } else moveLeft();
-    }, moveFrequency);
-  }
-
-  function moveStraight() {
     isGoingRight = false;
-    isGoingLeft = false;
-    clearInterval(rightTimerId);
+  }
+  isGoingLeft = true;
+  leftTimerId = setInterval(() => {
+    if (doodlerLeftSpace >= 0) {
+      doodlerLeftSpace -= doodlerHorizontalSpeed;
+      doodler.style.left = doodlerLeftSpace + 'px';
+    } else moveRight();
+  }, moveFrequency);
+}
+function moveRight() {
+  clearInterval(rightTimerId);
+  if (isGoingLeft) {
     clearInterval(leftTimerId);
+    isGoingLeft = false;
   }
+  isGoingRight = true;
+  rightTimerId = setInterval(() => {
+    if (doodlerLeftSpace <= 340) {
+      doodlerLeftSpace += doodlerHorizontalSpeed;
+      doodler.style.left = doodlerLeftSpace + 'px';
+    } else moveLeft();
+  }, moveFrequency);
+}
 
-  function cheatSkin(e) {
-    if (e.code === 'BracketRight') {
-      doodler.style.backgroundImage = 'url(\'../img/cheat-face.png\')';
-    }
+function moveStraight() {
+  isGoingRight = false;
+  isGoingLeft = false;
+  clearInterval(rightTimerId);
+  clearInterval(leftTimerId);
+}
+
+function cheatSkin(e) {
+  if (e.code === 'BracketRight') {
+    doodler.style.backgroundImage = 'url(\'../img/cheat-face.png\')';
   }
+}
 
 
 
-  function start() {
-    if (!isGameOver) {
-      if (currentMusic) offMusic();
-      onMusic(gameMusic);
-      createPlatforms();
-      createDoodler();
-      setInterval(movePlatforms, moveFrequency);
-      jump();
-      scoreLog.textContent = score;
-      document.addEventListener('keyup', control);
-      document.addEventListener('keyup', cheatSkin);
-    }
+function start() {
+  if (!isGameOver) {
+    if (currentMusic) offMusic();
+    onMusic(gameMusic);
+    createPlatforms();
+    createDoodler();
+    setInterval(movePlatforms, moveFrequency);
+    jump();
+    scoreLog.textContent = score;
+    document.addEventListener('keyup', control);
+    document.addEventListener('keyup', cheatSkin);
   }
-});
+}
