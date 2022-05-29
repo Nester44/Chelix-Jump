@@ -2,10 +2,10 @@
 'use strict';
 
 const grid = document.querySelector('.grid');
-const doodler = document.createElement('div');
 const startBtn = document.querySelector('.start-btn');
 const musicBtn = document.querySelector('.play-music');
 const scoreLog = document.getElementById('score');
+
 
 const menuMusic = new Audio('./sounds/menuMusic.mp3');
 const gameMusic = new Audio('./sounds/gameMusic.mp3');
@@ -50,6 +50,8 @@ class Platform {
 
 class Game {
   constructor() {
+    this.doodler = document.createElement('div');
+
     this.moveFrequency = 15;
     this.doodlerJumpSpeed = 10;
     this.doodlerStartFallSpeed = 2.5;
@@ -62,6 +64,7 @@ class Game {
     this.downTimerId;
     this.leftTimerId;
     this.rightTimerId;
+
     this.isJumping = true;
     this.isGoingLeft = false;
     this.isGoingRight = false;
@@ -76,11 +79,11 @@ class Game {
   }
 
   createDoodler() {
-    grid.appendChild(doodler);
-    doodler.classList.add('doodler');
+    grid.appendChild(this.doodler);
+    this.doodler.classList.add('doodler');
     this.doodlerLeftSpace = this.platforms[0].left;
-    doodler.style.left = this.doodlerLeftSpace + 'px';
-    doodler.style.bottom = this.doodlerBottomSpace + 'px';
+    this.doodler.style.left = this.doodlerLeftSpace + 'px';
+    this.doodler.style.bottom = this.doodlerBottomSpace + 'px';
   }
   createPlatforms() {
     for (let i = 0; i < this.platformCount; i++) {
@@ -115,7 +118,7 @@ class Game {
     }
     this.upTimerId = setInterval(() => {
       this.doodlerBottomSpace += this.doodlerJumpSpeed;
-      doodler.style.bottom = this.doodlerBottomSpace + 'px';
+      this.doodler.style.bottom = this.doodlerBottomSpace + 'px';
       if (this.doodlerBottomSpace > this.startPoint + 200) {
         this.fall();
       }
@@ -128,7 +131,7 @@ class Game {
     this.downTimerId = setInterval(() => {
       this.doodlerBottomSpace -= this.doodlerFallSpeed;
       this.doodlerFallSpeed *= this.acceleration;
-      doodler.style.bottom = this.doodlerBottomSpace + 'px';
+      this.doodler.style.bottom = this.doodlerBottomSpace + 'px';
       if (this.doodlerBottomSpace <= 0) {
         this.gameOver();
       }
@@ -152,6 +155,7 @@ class Game {
   }
   gameOver() {
     console.log('game over');
+    startBtn.style.visibility = 'visible';
     this.isGameOver = true;
     grid.innerHTML = this.score;
     clearInterval(this.upTimerId);
@@ -172,7 +176,7 @@ class Game {
     this.leftTimerId = setInterval(() => {
       if (this.doodlerLeftSpace >= 0) {
         this.doodlerLeftSpace -= this.doodlerHorizontalSpeed;
-        doodler.style.left = this.doodlerLeftSpace + 'px';
+        this.doodler.style.left = this.doodlerLeftSpace + 'px';
       } else this.moveRight();
     }, this.moveFrequency);
   }
@@ -186,7 +190,7 @@ class Game {
     this.rightTimerId = setInterval(() => {
       if (this.doodlerLeftSpace <= 340) {
         this.doodlerLeftSpace += this.doodlerHorizontalSpeed;
-        doodler.style.left = this.doodlerLeftSpace + 'px';
+        this.doodler.style.left = this.doodlerLeftSpace + 'px';
       } else this.moveLeft();
     }, this.moveFrequency);
   }
@@ -212,7 +216,7 @@ class Game {
 
   cheatSkin(e) {
     if (e.code === 'BracketRight') {
-      doodler.style.backgroundImage = 'url(\'../img/cheat-face.png\')';
+      this.doodler.style.backgroundImage = 'url(\'../img/cheat-face.png\')';
     }
   }
 
@@ -234,9 +238,9 @@ class Game {
 }
 
 startBtn.addEventListener('click', () => {
-  // Add statement
   window.game = new Game();
   window.game.start();
+  console.log(window.game);
   startBtn.style.visibility = 'hidden';
 }
 );
