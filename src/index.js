@@ -2,10 +2,10 @@
 'use strict';
 
 const grid = document.querySelector('.grid');
+const settingsWindow = document.querySelector('.wrapper');
 const startBtn = document.querySelector('.start-btn');
 const musicBtn = document.querySelector('.play-music');
-// const scoreLog = document.getElementById('score');
-
+const settingsBtn = document.querySelector('.settings-btn');
 
 const menuMusic = new Audio('./sounds/menuMusic.mp3');
 const gameMusic = new Audio('./sounds/gameMusic.mp3');
@@ -253,3 +253,9 @@ startBtn.addEventListener('click', () => {
   startBtn.style.visibility = 'hidden';
 }
 );
+
+settingsBtn.addEventListener('click', () => {
+  let visibility = settingsWindow.style.visibility;
+  if (visibility === 'hidden') settingsWindow.style.visibility = 'visible';
+  else settingsWindow.style.visibility = 'hidden';
+});
