@@ -285,9 +285,13 @@ class Game {
 
 startBtn.addEventListener('click', () => {
   grid.innerHTML = ''; // removing score
-  window.game = new Game(difficultLevel);
-  window.game.start();
-  startBtn.style.visibility = 'hidden';
+  try {
+    window.game = new Game(difficultLevel);
+    window.game.start();
+    startBtn.style.visibility = 'hidden';
+  } catch (error) {
+    alert('Select difficulty');
+  }
 }
 );
 
@@ -300,7 +304,8 @@ function hideSettings() {
 settingsBtn.addEventListener('click', hideSettings);
 applyBtn.addEventListener('click', () => {
   const chosenOption = document.querySelector('input[name="level"]:checked');
-  if (chosenOption)
+  if (chosenOption) {
     difficultLevel = chosenOption.value;
-  hideSettings();
+    hideSettings();
+  }
 });
