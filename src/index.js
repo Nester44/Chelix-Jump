@@ -19,7 +19,7 @@ const settingsConfig = {
     doodlerJumpSpeed: 10,
     doodlerStartFallSpeed: 3,
     doodlerHorizontalSpeed: 2.5,
-    platformStartSpeed: 4,
+    platformStartSpeed: 3,
   },
   'medium': {
     doodlerJumpSpeed: 12,
@@ -35,28 +35,36 @@ const settingsConfig = {
   }
 };
 
-let difficultLevel = 'easy';
+let difficultLevel;
 
-function onMusic(sound) {
-  sound.play();
-  currentMusic = sound;
-  musicBtn.classList.remove('off');
-  musicBtn.classList.add('on');
-}
+let isMusicOn = false;
 
-function offMusic() {
-  currentMusic.pause();
-  musicBtn.classList.remove('on');
-  musicBtn.classList.add('off');
-}
-
-musicBtn.addEventListener('click', () => {
-  if (musicBtn.classList.contains('off')) {
-    onMusic(menuMusic);
+function switchMusic() {
+  if (isMusicOn) {
+    musicBtn.classList.remove('on');
+    musicBtn.classList.add('off');
+    stopMusic();
+    isMusicOn = false;
   } else {
-    offMusic();
+    musicBtn.classList.remove('off');
+    musicBtn.classList.add('on');
+    isMusicOn = true;
+    playMusic(menuMusic);
   }
-});
+}
+
+function playMusic(sound) {
+  if (isMusicOn)   {
+    sound.play();
+    currentMusic = sound;
+  }
+}
+
+function stopMusic() {
+  currentMusic.pause();
+}
+
+musicBtn.addEventListener('click', switchMusic);
 
 class Platform {
   constructor(newPlatBottom) {
@@ -136,7 +144,7 @@ class Game {
   movePlatforms() {
     if (this.doodlerBottomSpace > 200) {
       this.platforms.forEach((platform) => {
-        if (this.doodlerBottomSpace > 500) {
+        if (this.doodlerBottomSpace > 550) {
           this.platformSpeed = this.platformStartSpeed * 1.5;
         } else this.platformSpeed = this.platformStartSpeed;
         platform.bottom -= this.platformSpeed;
@@ -204,8 +212,8 @@ class Game {
     clearInterval(this.downTimerId);
     clearInterval(this.leftTimerId);
     clearInterval(this.rightTimerId);
-    offMusic();
-    onMusic(menuMusic);
+    stopMusic();
+    playMusic(menuMusic);
   }
 
   moveLeft() {
@@ -266,8 +274,8 @@ class Game {
 
   start() {
     if (!this.isGameOver) {
-      if (currentMusic) offMusic();
-      onMusic(gameMusic);
+      if (currentMusic) stopMusic();
+      playMusic(gameMusic);
       this.createPlatforms();
       this.createDoodler();
       grid.append(this.scoreLog);
