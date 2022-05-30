@@ -6,12 +6,36 @@ const settingsWindow = document.querySelector('.wrapper');
 const startBtn = document.querySelector('.start-btn');
 const musicBtn = document.querySelector('.play-music');
 const settingsBtn = document.querySelector('.settings-btn');
+const applyBtn = document.querySelector('#apply-btn');
 
 const menuMusic = new Audio('./sounds/menuMusic.mp3');
 const gameMusic = new Audio('./sounds/gameMusic.mp3');
 let currentMusic;
 menuMusic.volume = 0.1;
 gameMusic.volume = 0.1;
+
+const settingsConfig = {
+  'easy': {
+    doodlerJumpSpeed: 10,
+    doodlerStartFallSpeed: 3,
+    doodlerHorizontalSpeed: 2.5,
+    platformStartSpeed: 4,
+  },
+  'medium': {
+    doodlerJumpSpeed: 12,
+    doodlerStartFallSpeed: 4,
+    doodlerHorizontalSpeed: 3,
+    platformStartSpeed: 5,
+  },
+  'hard': {
+    doodlerJumpSpeed: 14,
+    doodlerStartFallSpeed: 5,
+    doodlerHorizontalSpeed: 3.5,
+    platformStartSpeed: 6,
+  }
+};
+
+let difficultLevel = 'easy';
 
 function onMusic(sound) {
   sound.play();
@@ -49,19 +73,16 @@ class Platform {
 }
 
 class Game {
-  constructor() {
+  constructor(difficultLevel) {
     this.doodler = document.createElement('div');
     this.scoreLog = document.createElement('div');
     this.scoreLog.classList.add('score');
 
+    this.defineSettings(difficultLevel);
 
     this.moveFrequency = 15;
-    this.doodlerJumpSpeed = 10;
-    this.doodlerStartFallSpeed = 2.5;
     this.doodlerFallSpeed = this.doodlerStartFallSpeed;
     this.acceleration = 1.025;
-    this.doodlerHorizontalSpeed = 2.5;
-    this.platformStartSpeed = 2.5;
     this.platformSpeed = this.platformStartSpeed;
 
     this.upTimerId;
@@ -80,6 +101,20 @@ class Game {
     this.isGameOver = false;
     this.platformCount = 5;
     this.platforms = [];
+  }
+
+  defineSettings(difficultLevel) {
+    const {
+      doodlerJumpSpeed,
+      doodlerStartFallSpeed,
+      doodlerHorizontalSpeed,
+      platformStartSpeed,
+    } = settingsConfig[difficultLevel];
+
+    this.doodlerJumpSpeed = doodlerJumpSpeed;
+    this.doodlerStartFallSpeed = doodlerStartFallSpeed;
+    this.doodlerHorizontalSpeed = doodlerHorizontalSpeed;
+    this.platformStartSpeed = platformStartSpeed;
   }
 
   createDoodler() {
@@ -247,15 +282,24 @@ class Game {
 
 startBtn.addEventListener('click', () => {
   grid.innerHTML = ''; // removing score
-  window.game = new Game();
+  window.game = new Game(difficultLevel);
   window.game.start();
   console.log(window.game);
   startBtn.style.visibility = 'hidden';
 }
 );
 
-settingsBtn.addEventListener('click', () => {
-  let visibility = settingsWindow.style.visibility;
-  if (visibility === 'hidden') settingsWindow.style.visibility = 'visible';
-  else settingsWindow.style.visibility = 'hidden';
+function hideSettings() {
+  let display = settingsWindow.style.display;
+  if (display === 'none') settingsWindow.style.display = 'flex';
+  else settingsWindow.style.display = 'none';
+}
+
+settingsBtn.addEventListener('click', hideSettings);
+applyBtn.addEventListener('click', () => {
+  const chosenOption = document.querySelector('input[name="level"]:checked');
+  if (chosenOption)
+    difficultLevel = chosenOption.value;
+  console.log('Difficult Level: ', difficultLevel);
+  hideSettings();
 });
