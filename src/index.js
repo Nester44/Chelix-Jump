@@ -28,7 +28,7 @@ const settingsConfig = {
     platformStartSpeed: 5,
   },
   'hard': {
-    doodlerJumpSpeed: 14,
+    doodlerJumpSpeed: 12,
     doodlerStartFallSpeed: 5,
     doodlerHorizontalSpeed: 3.5,
     platformStartSpeed: 6,
@@ -296,8 +296,13 @@ startBtn.addEventListener('click', () => {
 
 function hideSettings() {
   let display = settingsWindow.style.display;
-  if (display === 'none') settingsWindow.style.display = 'flex';
-  else settingsWindow.style.display = 'none';
+  if (display === 'none') {
+    settingsWindow.style.display = 'flex';
+    startBtn.style.visibility = 'hidden';
+  } else {
+    settingsWindow.style.display = 'none';
+    startBtn.style.visibility = 'visible';
+  }
 }
 
 settingsBtn.addEventListener('click', hideSettings);
