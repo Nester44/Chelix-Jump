@@ -206,7 +206,6 @@ class Game {
     clearInterval(this.leftTimerId);
     clearInterval(this.rightTimerId);
     currentMusic.pause();
-
     playMusic(menuMusic);
   }
 
@@ -277,7 +276,7 @@ class Game {
       setInterval(() => this.movePlatforms(), this.moveFrequency);
       this.jump();
       this.scoreLog.textContent = this.score;
-      document.addEventListener('keyup', (e) => this.control(e));
+      document.addEventListener('keydown', (e) => this.control(e));
       document.addEventListener('keyup', (e) => this.cheatSkin(e));
     }
   }
