@@ -43,7 +43,7 @@ function switchMusic() {
   if (isMusicOn) {
     musicBtn.classList.remove('on');
     musicBtn.classList.add('off');
-    stopMusic();
+    currentMusic.pause();
     isMusicOn = false;
   } else {
     musicBtn.classList.remove('off');
@@ -58,10 +58,6 @@ function playMusic(sound) {
     sound.play();
     currentMusic = sound;
   }
-}
-
-function stopMusic() {
-  currentMusic.pause();
 }
 
 musicBtn.addEventListener('click', switchMusic);
@@ -209,7 +205,8 @@ class Game {
     clearInterval(this.downTimerId);
     clearInterval(this.leftTimerId);
     clearInterval(this.rightTimerId);
-    stopMusic();
+    currentMusic.pause();
+
     playMusic(menuMusic);
   }
 
@@ -271,7 +268,8 @@ class Game {
 
   start() {
     if (!this.isGameOver) {
-      if (currentMusic) stopMusic();
+      if (currentMusic)   currentMusic.pause();
+
       playMusic(gameMusic);
       this.createPlatforms();
       this.createDoodler();
