@@ -138,7 +138,6 @@ class Game {
       let newPlatBottom = 100 + i * platGap;
       const newPlatform = new Platform(newPlatBottom);
       this.platforms.push(newPlatform);
-      console.log(this.platforms);
     }
   }
   movePlatforms() {
@@ -193,7 +192,6 @@ class Game {
           (this.doodlerLeftSpace <= (platform.left + 85)) &&
           !this.isJumping
         ) {
-          console.log('landed');
           this.doodlerFallSpeed = this.doodlerStartFallSpeed;
           this.score++;
           this.scoreLog.textContent = this.score;
@@ -204,7 +202,6 @@ class Game {
     }, this.moveFrequency);
   }
   gameOver() {
-    console.log('game over');
     startBtn.style.visibility = 'visible';
     this.isGameOver = true;
     grid.innerHTML = this.score;
@@ -292,7 +289,6 @@ startBtn.addEventListener('click', () => {
   grid.innerHTML = ''; // removing score
   window.game = new Game(difficultLevel);
   window.game.start();
-  console.log(window.game);
   startBtn.style.visibility = 'hidden';
 }
 );
@@ -308,6 +304,5 @@ applyBtn.addEventListener('click', () => {
   const chosenOption = document.querySelector('input[name="level"]:checked');
   if (chosenOption)
     difficultLevel = chosenOption.value;
-  console.log('Difficult Level: ', difficultLevel);
   hideSettings();
 });
