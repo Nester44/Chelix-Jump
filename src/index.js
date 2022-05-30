@@ -283,7 +283,7 @@ class Game {
       this.jump();
       this.scoreLog.textContent = this.score;
       document.addEventListener('keyup', (e) => this.control(e));
-      document.addEventListener('keyup', this.cheatSkin);
+      document.addEventListener('keyup', (e) => this.cheatSkin(e));
     }
   }
 }
