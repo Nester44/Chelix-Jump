@@ -266,19 +266,18 @@ class Game {
 
 
   start() {
-    if (!this.isGameOver) {
-      if (currentMusic)   currentMusic.pause();
+    if (this.isGameOver) return;
+    if (currentMusic)   currentMusic.pause();
 
-      playMusic(gameMusic);
-      this.createPlatforms();
-      this.createDoodler();
-      grid.append(this.scoreLog);
-      setInterval(() => this.movePlatforms(), this.moveFrequency);
-      this.jump();
-      this.scoreLog.textContent = this.score;
-      document.addEventListener('keydown', (e) => this.control(e));
-      document.addEventListener('keyup', (e) => this.cheatSkin(e));
-    }
+    playMusic(gameMusic);
+    this.createPlatforms();
+    this.createDoodler();
+    grid.append(this.scoreLog);
+    setInterval(() => this.movePlatforms(), this.moveFrequency);
+    this.jump();
+    this.scoreLog.textContent = this.score;
+    document.addEventListener('keydown', (e) => this.control(e));
+    document.addEventListener('keyup', (e) => this.cheatSkin(e));
   }
 }
 
