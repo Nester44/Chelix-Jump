@@ -66,6 +66,9 @@ musicBtn.addEventListener('click', switchMusic);
 
 class Platform {
   constructor(newPlatBottom) {
+    this.height = 15;
+    this.width = 85;
+
     this.bottom = newPlatBottom;
     this.left = Math.random() * (grid.clientWidth - platformWidth);
     this.visual = document.createElement('div');
@@ -123,6 +126,8 @@ class Game {
     grid.appendChild(this.doodler);
     this.doodler.classList.add('doodler');
     this.doodlerLeftSpace = this.platforms[0].left;
+    this.doodlerWidth = 60;
+
     this.doodler.style.left = this.doodlerLeftSpace + 'px';
     this.doodler.style.bottom = this.doodlerBottomSpace + 'px';
   }
@@ -179,11 +184,15 @@ class Game {
         this.gameOver();
       }
       this.platforms.forEach((platform) => {
+        const doodlerRightSpace = this.doodlerLeftSpace + this.doodlerWidth;
+
+        const platformTop = platform.bottom + platform.height;
+        const platformRight = platform.left + platform.width;
         if (
           (this.doodlerBottomSpace >= platform.bottom) &&
-          (this.doodlerBottomSpace <= platform.bottom + 15) &&
-          ((this.doodlerLeftSpace + 60) >= platform.left) &&
-          (this.doodlerLeftSpace <= (platform.left + 85)) &&
+          (this.doodlerBottomSpace <= platformTop) &&
+          (doodlerRightSpace >= platform.left) &&
+          (this.doodlerLeftSpace <= platformRight) &&
           !this.isJumping
         ) {
           this.doodlerFallSpeed = this.doodlerStartFallSpeed;
