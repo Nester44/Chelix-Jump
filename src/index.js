@@ -15,21 +15,21 @@ gameMusic.volume = 0.1;
 
 const settingsConfig = {
   'easy': {
-    doodlerJumpSpeed: 10,
-    doodlerStartFallSpeed: 3,
-    doodlerHorizontalSpeed: 2.5,
+    doodJumpSpeed: 10,
+    doodStartFallSpeed: 3,
+    doodHorizontalSpeed: 2.5,
     platformStartSpeed: 3,
   },
   'medium': {
-    doodlerJumpSpeed: 12,
-    doodlerStartFallSpeed: 4,
-    doodlerHorizontalSpeed: 3,
+    doodJumpSpeed: 12,
+    doodStartFallSpeed: 4,
+    doodHorizontalSpeed: 3,
     platformStartSpeed: 5,
   },
   'hard': {
-    doodlerJumpSpeed: 12,
-    doodlerStartFallSpeed: 5,
-    doodlerHorizontalSpeed: 3.5,
+    doodJumpSpeed: 12,
+    doodStartFallSpeed: 5,
+    doodHorizontalSpeed: 3.5,
     platformStartSpeed: 6,
   }
 };
@@ -80,14 +80,14 @@ class Platform {
 
 class Game {
   constructor(difficultLevel) {
-    this.doodler = document.createElement('div');
+    this.dood = document.createElement('div');
     this.scoreLog = document.createElement('div');
     this.scoreLog.classList.add('score');
 
     this.defineSettings(difficultLevel);
 
     this.moveFrequency = 15;
-    this.doodlerFallSpeed = this.doodlerStartFallSpeed;
+    this.doodFallSpeed = this.doodStartFallSpeed;
     this.acceleration = 1.025;
     this.platformSpeed = this.platformStartSpeed;
 
@@ -102,8 +102,8 @@ class Game {
     this.score = 0;
 
     this.startPoint = 150;
-    this.doodlerLeftSpace = 50;
-    this.doodlerBottomSpace = this.startPoint;
+    this.doodLeftSpace = 50;
+    this.doodBottomSpace = this.startPoint;
     this.isGameOver = false;
     this.platformCount = 5;
     this.platforms = [];
@@ -116,23 +116,23 @@ class Game {
   }
 
   defineSettings(difficultLevel) {
-    const { doodlerJumpSpeed, doodlerStartFallSpeed, doodlerHorizontalSpeed,
+    const { doodJumpSpeed, doodStartFallSpeed, doodHorizontalSpeed,
       platformStartSpeed } = settingsConfig[difficultLevel];
 
-    this.doodlerJumpSpeed = doodlerJumpSpeed;
-    this.doodlerStartFallSpeed = doodlerStartFallSpeed;
-    this.doodlerHorizontalSpeed = doodlerHorizontalSpeed;
+    this.doodJumpSpeed = doodJumpSpeed;
+    this.doodStartFallSpeed = doodStartFallSpeed;
+    this.doodHorizontalSpeed = doodHorizontalSpeed;
     this.platformStartSpeed = platformStartSpeed;
   }
 
   createDoodler() {
-    grid.appendChild(this.doodler);
-    this.doodler.classList.add('doodler');
-    this.doodlerLeftSpace = this.platforms[0].left;
-    this.doodlerWidth = 60;
+    grid.appendChild(this.dood);
+    this.dood.classList.add('dood');
+    this.doodLeftSpace = this.platforms[0].left;
+    this.doodWidth = 60;
 
-    this.doodler.style.left = this.doodlerLeftSpace + 'px';
-    this.doodler.style.bottom = this.doodlerBottomSpace + 'px';
+    this.dood.style.left = this.doodLeftSpace + 'px';
+    this.dood.style.bottom = this.doodBottomSpace + 'px';
   }
   createPlatforms() {
     for (let i = 0; i < this.platformCount; i++) {
@@ -143,9 +143,9 @@ class Game {
     }
   }
   movePlatforms() {
-    if (this.doodlerBottomSpace > this.moveHeight) {
+    if (this.doodBottomSpace > this.moveHeight) {
       this.platforms.forEach((platform) => {
-        if (this.doodlerBottomSpace > this.overHeight) {
+        if (this.doodBottomSpace > this.overHeight) {
           this.platformSpeed = this.platformStartSpeed * 1.5;
         } else this.platformSpeed = this.platformStartSpeed;
         platform.bottom -= this.platformSpeed;
@@ -168,9 +168,9 @@ class Game {
       this.isJumping = true;
     }
     this.upTimerId = setInterval(() => {
-      this.doodlerBottomSpace += this.doodlerJumpSpeed;
-      this.doodler.style.bottom = this.doodlerBottomSpace + 'px';
-      if (this.doodlerBottomSpace > this.startPoint + this.platformDistance) {
+      this.doodBottomSpace += this.doodJumpSpeed;
+      this.dood.style.bottom = this.doodBottomSpace + 'px';
+      if (this.doodBottomSpace > this.startPoint + this.platformDistance) {
         this.fall();
       }
     }, this.moveFrequency);
@@ -180,28 +180,28 @@ class Game {
     clearInterval(this.upTimerId);
     this.isJumping = false;
     this.downTimerId = setInterval(() => {
-      this.doodlerBottomSpace -= this.doodlerFallSpeed;
-      this.doodlerFallSpeed *= this.acceleration;
-      this.doodler.style.bottom = this.doodlerBottomSpace + 'px';
-      if (this.doodlerBottomSpace <= 0) {
+      this.doodBottomSpace -= this.doodFallSpeed;
+      this.doodFallSpeed *= this.acceleration;
+      this.dood.style.bottom = this.doodBottomSpace + 'px';
+      if (this.doodBottomSpace <= 0) {
         this.gameOver();
       }
       this.platforms.forEach((platform) => {
-        const doodlerRightSpace = this.doodlerLeftSpace + this.doodlerWidth;
+        const doodRightSpace = this.doodLeftSpace + this.doodWidth;
 
         const platformTop = platform.bottom + platform.height;
         const platformRight = platform.left + platform.width;
-        if (
-          (this.doodlerBottomSpace >= platform.bottom) &&
-          (this.doodlerBottomSpace <= platformTop) &&
-          (doodlerRightSpace >= platform.left) &&
-          (this.doodlerLeftSpace <= platformRight) &&
-          !this.isJumping
-        ) {
-          this.doodlerFallSpeed = this.doodlerStartFallSpeed;
+
+        const isDoodAbove = this.doodBottomSpace >= platform.bottom &&
+                            this.doodBottomSpace <= platformTop;
+        const isDoodBetweenEdges = doodRightSpace >= platform.left &&
+                                   this.doodLeftSpace <= platformRight;
+
+        if (isDoodAbove && isDoodBetweenEdges && !this.isJumping) {
+          this.doodFallSpeed = this.doodStartFallSpeed;
           this.score++;
           this.scoreLog.textContent = this.score;
-          this.startPoint = this.doodlerBottomSpace;
+          this.startPoint = this.doodBottomSpace;
           this.jump();
         }
       });
@@ -231,9 +231,9 @@ class Game {
     }
     this.isGoingLeft = true;
     this.leftTimerId = setInterval(() => {
-      if (this.doodlerLeftSpace >= 0) {
-        this.doodlerLeftSpace -= this.doodlerHorizontalSpeed;
-        this.doodler.style.left = this.doodlerLeftSpace + 'px';
+      if (this.doodLeftSpace >= 0) {
+        this.doodLeftSpace -= this.doodHorizontalSpeed;
+        this.dood.style.left = this.doodLeftSpace + 'px';
       } else this.moveRight();
     }, this.moveFrequency);
   }
@@ -245,9 +245,9 @@ class Game {
     }
     this.isGoingRight = true;
     this.rightTimerId = setInterval(() => {
-      if (this.doodlerLeftSpace <= grid.clientWidth - this.doodlerWidth) {
-        this.doodlerLeftSpace += this.doodlerHorizontalSpeed;
-        this.doodler.style.left = this.doodlerLeftSpace + 'px';
+      if (this.doodLeftSpace <= grid.clientWidth - this.doodWidth) {
+        this.doodLeftSpace += this.doodHorizontalSpeed;
+        this.dood.style.left = this.doodLeftSpace + 'px';
       } else this.moveLeft();
     }, this.moveFrequency);
   }
@@ -277,7 +277,7 @@ class Game {
 
   cheatSkin(e) {
     if (e.code === 'BracketRight') {
-      this.doodler.style.backgroundImage = 'url(\'../img/cheat-face.png\')';
+      this.dood.style.backgroundImage = 'url(\'../img/cheat-face.png\')';
     }
   }
 
