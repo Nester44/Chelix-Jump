@@ -1,4 +1,3 @@
-/* eslint-disable prefer-const */
 'use strict';
 
 const grid = document.querySelector('.grid');
@@ -133,8 +132,8 @@ class Game {
   }
   createPlatforms() {
     for (let i = 0; i < this.platformCount; i++) {
-      let platGap = grid.clientHeight / this.platformCount;
-      let newPlatBottom = firstPlatformHeight + i * platGap;
+      const platGap = grid.clientHeight / this.platformCount;
+      const newPlatBottom = firstPlatformHeight + i * platGap;
       const newPlatform = new Platform(newPlatBottom);
       this.platforms.push(newPlatform);
     }
@@ -150,10 +149,10 @@ class Game {
         visual.style.bottom = platform.bottom + 'px';
 
         if (platform.bottom < 10) {
-          let firstPlatform = this.platforms[0].visual;
+          const firstPlatform = this.platforms[0].visual;
           firstPlatform.classList.remove('platform');
           this.platforms.shift();
-          let newPlatform = new Platform(600);
+          const newPlatform = new Platform(600);
           this.platforms.push(newPlatform);
         }
       });
@@ -212,7 +211,11 @@ class Game {
     clearInterval(this.downTimerId);
     clearInterval(this.leftTimerId);
     clearInterval(this.rightTimerId);
-    currentMusic.pause();
+    try {
+      currentMusic.pause();
+    } catch {
+      console.error('Music can not be paused because there is no music');
+    }
     playMusic(menuMusic);
   }
 
@@ -301,7 +304,7 @@ startBtn.addEventListener('click', () => {
 );
 
 function hideSettings() {
-  let display = settingsWindow.style.display;
+  const display = settingsWindow.style.display;
   if (display === 'none') {
     settingsWindow.style.display = 'flex';
     startBtn.style.visibility = 'hidden';
