@@ -6,8 +6,6 @@ const startBtn = document.querySelector('.start-btn');
 const musicBtn = document.querySelector('.play-music');
 const settingsBtn = document.querySelector('.settings-btn');
 const applyBtn = document.querySelector('#apply-btn');
-const platformWidth = 85;
-const firstPlatformHeight = 100;
 
 const menuMusic = new Audio('./sounds/menuMusic.mp3');
 const gameMusic = new Audio('./sounds/gameMusic.mp3');
@@ -69,7 +67,7 @@ class Platform {
     this.width = 85;
 
     this.bottom = newPlatBottom;
-    this.left = Math.random() * (grid.clientWidth - platformWidth);
+    this.left = Math.random() * (grid.clientWidth - this.width);
     this.visual = document.createElement('div');
 
     const visual = this.visual;
@@ -110,6 +108,7 @@ class Game {
     this.platformCount = 5;
     this.platforms = [];
     this.platformDistance = 200;
+    this.firstPlatformHeight = 100;
 
     this.moveHeight = 200;
     this.overHeight = 550;
@@ -138,7 +137,7 @@ class Game {
   createPlatforms() {
     for (let i = 0; i < this.platformCount; i++) {
       const platGap = grid.clientHeight / this.platformCount;
-      const newPlatBottom = firstPlatformHeight + i * platGap;
+      const newPlatBottom = this.firstPlatformHeight + i * platGap;
       const newPlatform = new Platform(newPlatBottom);
       this.platforms.push(newPlatform);
     }
@@ -261,12 +260,16 @@ class Game {
   }
 
   control(e) {
-    if (e.key === 'ArrowLeft') {
+    switch (e.key) {
+    case 'ArrowLeft':
       this.moveLeft();
-    } else if (e.key === 'ArrowRight') {
+      break;
+    case 'ArrowRight':
       this.moveRight();
-    } else if (e.key === 'ArrowUp') {
+      break;
+    case 'ArrowUp':
       this.moveStraight();
+      break;
     }
   }
 
