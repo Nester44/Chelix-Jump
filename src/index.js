@@ -109,6 +109,11 @@ class Game {
     this.isGameOver = false;
     this.platformCount = 5;
     this.platforms = [];
+    this.platformDistance = 200;
+
+    this.moveHeight = 200;
+    this.overHeight = 550;
+    this.disappearBorder = 10;
   }
 
   defineSettings(difficultLevel) {
@@ -139,20 +144,20 @@ class Game {
     }
   }
   movePlatforms() {
-    if (this.doodlerBottomSpace > 200) {
+    if (this.doodlerBottomSpace > this.moveHeight) {
       this.platforms.forEach((platform) => {
-        if (this.doodlerBottomSpace > 550) {
+        if (this.doodlerBottomSpace > this.overHeight) {
           this.platformSpeed = this.platformStartSpeed * 1.5;
         } else this.platformSpeed = this.platformStartSpeed;
         platform.bottom -= this.platformSpeed;
         const visual = platform.visual;
         visual.style.bottom = platform.bottom + 'px';
 
-        if (platform.bottom < 10) {
+        if (platform.bottom < this.disappearBorder) {
           const firstPlatform = this.platforms[0].visual;
           firstPlatform.classList.remove('platform');
           this.platforms.shift();
-          const newPlatform = new Platform(600);
+          const newPlatform = new Platform(grid.clientHeight);
           this.platforms.push(newPlatform);
         }
       });
@@ -166,7 +171,7 @@ class Game {
     this.upTimerId = setInterval(() => {
       this.doodlerBottomSpace += this.doodlerJumpSpeed;
       this.doodler.style.bottom = this.doodlerBottomSpace + 'px';
-      if (this.doodlerBottomSpace > this.startPoint + 200) {
+      if (this.doodlerBottomSpace > this.startPoint + this.platformDistance) {
         this.fall();
       }
     }, this.moveFrequency);
@@ -241,7 +246,7 @@ class Game {
     }
     this.isGoingRight = true;
     this.rightTimerId = setInterval(() => {
-      if (this.doodlerLeftSpace <= 340) {
+      if (this.doodlerLeftSpace <= grid.clientWidth - this.doodlerWidth) {
         this.doodlerLeftSpace += this.doodlerHorizontalSpeed;
         this.doodler.style.left = this.doodlerLeftSpace + 'px';
       } else this.moveLeft();
