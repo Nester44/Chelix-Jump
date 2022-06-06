@@ -7,6 +7,8 @@ const startBtn = document.querySelector('.start-btn');
 const musicBtn = document.querySelector('.play-music');
 const settingsBtn = document.querySelector('.settings-btn');
 const applyBtn = document.querySelector('#apply-btn');
+const platformWidth = 85;
+const firstPlatformHeight = 100;
 
 const menuMusic = new Audio('./sounds/menuMusic.mp3');
 const gameMusic = new Audio('./sounds/gameMusic.mp3');
@@ -65,7 +67,7 @@ musicBtn.addEventListener('click', switchMusic);
 class Platform {
   constructor(newPlatBottom) {
     this.bottom = newPlatBottom;
-    this.left = Math.random() * 315;
+    this.left = Math.random() * (grid.clientWidth - platformWidth);
     this.visual = document.createElement('div');
 
     const visual = this.visual;
@@ -108,12 +110,8 @@ class Game {
   }
 
   defineSettings(difficultLevel) {
-    const {
-      doodlerJumpSpeed,
-      doodlerStartFallSpeed,
-      doodlerHorizontalSpeed,
-      platformStartSpeed,
-    } = settingsConfig[difficultLevel];
+    const { doodlerJumpSpeed, doodlerStartFallSpeed, doodlerHorizontalSpeed,
+      platformStartSpeed } = settingsConfig[difficultLevel];
 
     this.doodlerJumpSpeed = doodlerJumpSpeed;
     this.doodlerStartFallSpeed = doodlerStartFallSpeed;
@@ -130,8 +128,8 @@ class Game {
   }
   createPlatforms() {
     for (let i = 0; i < this.platformCount; i++) {
-      let platGap = 600 / this.platformCount;
-      let newPlatBottom = 100 + i * platGap;
+      let platGap = grid.clientHeight / this.platformCount;
+      let newPlatBottom = firstPlatformHeight + i * platGap;
       const newPlatform = new Platform(newPlatBottom);
       this.platforms.push(newPlatform);
     }
