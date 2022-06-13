@@ -127,7 +127,7 @@ class Game {
 
   createDoodler() {
     grid.appendChild(this.dood);
-    this.dood.classList.add('dood');
+    this.dood.classList.add('doodler');
     this.doodLeftSpace = this.platforms[0].left;
     this.doodWidth = 60;
 
