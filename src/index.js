@@ -144,7 +144,7 @@ class Game {
     if (this.doodBottomSpace > this.moveHeight) {
       this.platforms.forEach((platform) => {
         if (this.doodBottomSpace > this.overHeight) {
-          this.platformSpeed = this.platformStartSpeed * 1.5;
+          this.platformSpeed = this.platformStartSpeed + 3;
         } else this.platformSpeed = this.platformStartSpeed;
         platform.bottom -= this.platformSpeed;
         const visual = platform.visual;
