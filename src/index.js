@@ -275,6 +275,7 @@ class Game {
     if (this.isGameOver) return;
     if (currentMusic)   currentMusic.pause();
 
+    this.isGameOver = false;
     playMusic(gameMusic);
     this.createPlatforms();
     this.createDoodler();
@@ -306,7 +307,11 @@ function hideSettings() {
     startBtn.style.visibility = 'hidden';
   } else {
     settingsWindow.style.display = 'none';
-    startBtn.style.visibility = 'visible';
+
+    const isGameOver  = window?.game?.isGameOver;
+    if (isGameOver || isGameOver === undefined) {
+      startBtn.style.visibility = 'visible';
+    }
   }
 }
 
