@@ -114,7 +114,6 @@ class Game {
     this.overHeight = 550;
     this.disappearBorder = 10;
   }
-
   defineSettings(difficultLevel) {
     const { doodJumpSpeed, doodStartFallSpeed, doodHorizontalSpeed,
       platformStartSpeed } = settingsConfig[difficultLevel];
@@ -124,7 +123,6 @@ class Game {
     this.doodHorizontalSpeed = doodHorizontalSpeed;
     this.platformStartSpeed = platformStartSpeed;
   }
-
   createDoodler() {
     grid.appendChild(this.dood);
     this.dood.classList.add('doodler');
@@ -175,7 +173,6 @@ class Game {
       }
     }, this.moveFrequency);
   }
-
   fall() {
     clearInterval(this.upTimerId);
     this.isJumping = false;
@@ -188,16 +185,16 @@ class Game {
       }
       this.platforms.forEach((platform) => {
         const doodRightSpace = this.doodLeftSpace + this.doodWidth;
-
         const platformTop = platform.bottom + platform.height;
         const platformRight = platform.left + platform.width;
 
-        const isDoodAbove = this.doodBottomSpace >= platform.bottom &&
-                            this.doodBottomSpace <= platformTop;
-        const isDoodBetweenEdges = doodRightSpace >= platform.left &&
-                                   this.doodLeftSpace <= platformRight;
-
-        if (isDoodAbove && isDoodBetweenEdges && !this.isJumping) {
+        if (
+          this.doodBottomSpace >= platform.bottom &&
+          this.doodBottomSpace <= platformTop &&
+          doodRightSpace >= platform.left &&
+          this.doodLeftSpace <= platformRight &&
+          !this.isJumping
+        ) {
           this.doodFallSpeed = this.doodStartFallSpeed;
           this.score++;
           this.scoreLog.textContent = this.score;
@@ -222,7 +219,6 @@ class Game {
     }
     playMusic(menuMusic);
   }
-
   moveLeft() {
     clearInterval(this.leftTimerId);
     if (this.isGoingRight) {
@@ -251,14 +247,12 @@ class Game {
       } else this.moveLeft();
     }, this.moveFrequency);
   }
-
   moveStraight() {
     this.isGoingRight = false;
     this.isGoingLeft = false;
     clearInterval(this.rightTimerId);
     clearInterval(this.leftTimerId);
   }
-
   control(e) {
     switch (e.key) {
     case 'ArrowLeft':
@@ -272,17 +266,11 @@ class Game {
       break;
     }
   }
-
-
-
   cheatSkin(e) {
     if (e.code === 'BracketRight') {
       this.dood.style.backgroundImage = 'url(\'../img/cheat-face.png\')';
     }
   }
-
-
-
   start() {
     if (this.isGameOver) return;
     if (currentMusic)   currentMusic.pause();
