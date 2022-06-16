@@ -254,14 +254,14 @@ class Game {
     clearInterval(this.leftTimerId);
   }
   control(e) {
-    switch (e.key) {
-    case 'ArrowLeft':
+    switch (e.code) {
+    case 'KeyA':
       this.moveLeft();
       break;
-    case 'ArrowRight':
+    case 'KeyD':
       this.moveRight();
       break;
-    case 'ArrowUp':
+    case 'KeyW':
       this.moveStraight();
       break;
     }
