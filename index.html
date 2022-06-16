@@ -10,44 +10,8 @@
 </head>
 
 <body>
-    <div class="conatiner">
-        <div class="wrap">
-            <div class="wrapper">
-                <div class="title">Select difficult</div>
-                <div class="box">
-                    <input type="radio" name="level" id="option-1" value="easy">
-                    <input type="radio" name="level" id="option-2" value="medium">
-                    <input type="radio" name="level" id="option-3" value="hard">
-                    <label for="option-1" class="option-1">
-                        <div class="dot"></div>
-                        <div class="text">Easy</div>
-                    </label>
-                    <label for="option-2" class="option-2">
-                        <div class="dot"></div>
-                        <div class="text">Medium</div>
-                    </label>
-                    <label for="option-3" class="option-3">
-                        <div class="dot"></div>
-                        <div class="text">Hard</div>
-                    </label>
-                    <button id="apply-btn">
-                        <div class="text">Apply</div>
-                    </button>
-                </div>
-            </div>
-            <div class="grid">
-                <div id="score"></div>
-            </div>
-        </div>
-        <button class="start-btn">Start game</button>
-        <div class="container__row">
-            <button class="settings-btn"></button>
-            <button class="off play-music"></button>
-        </div>
-    </div>
-    <a href="https://github.com/Nester44/Doodle-Jump" class="code-link"><img src="./img/github-icon.png" alt=""></a>
+    <canvas id="canvas" tabindex="0" width="600" height="800"></canvas>
     <script src="./src/index.js"></script>
-
 </body>
 
 </html>
