@@ -137,7 +137,7 @@ class Game {
     this.dood.position.y += this.dood.vel_y;
 
     // teleportation between edges
-    if (this.dood.position.x + this.dood.widtha <= 0) {
+    if (this.dood.position.x + this.dood.width <= 0) {
       this.dood.position.x = ctx.canvas.width - this.dood.width / 2;
     }
     if (this.dood.position.x >= ctx.canvas.width) {
