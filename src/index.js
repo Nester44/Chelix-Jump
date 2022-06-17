@@ -77,6 +77,16 @@ class Game {
     });
   }
 
+  keyControl() {
+    canvas.addEventListener('keydown', (e) => {
+      if (e.code === 'Space') this.dood.isAbove = false;
+    });
+
+    canvas.addEventListener('keyup', (e) => {
+      if (e.code === 'Space') this.dood.isAbove = true;
+    });
+  }
+
   mainLoop() {
     ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
     this.platforms.forEach((p) => {
@@ -84,6 +94,7 @@ class Game {
 
       this.movePlat();
     });
+    this.keyControl();
     // this.dood.drawDood();
     requestAnimationFrame(this.mainLoop.bind(this));
   }
