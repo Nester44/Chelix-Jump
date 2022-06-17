@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 'use strict';
 
 const canvas = document.getElementById('canvas');
@@ -7,6 +8,9 @@ class Vector {
   constructor(x, y) {
     this.x = x;
     this.y = y;
+  }
+  dup() {
+    return new Vector(this.x, this.y);
   }
 }
 
@@ -29,15 +33,31 @@ class Platform {
 
 class Doodler {
   constructor(position) {
-    this.width = 60;
-    this.height = 100;
+    this.width = 50;
+    this.height = 80;
 
     this.position = position;
-    this.isAbove = true;
+    this.position.x -= this.width / 2;
+    this.position.y -= 50;
+    this.isAbove = false;
+
+    this.left = false;
+    this.right = false;
+    this.isJump = false;
+    this.isFall = false;
+
+    this.acc_y = 1;
+    this.vel_y = 0;
+
+    this.vel_x = 0;
+    this.acc_x = 0;
+    this.acceleration = 1;
   }
   drawDood() {
+    // y = top border of the dood
+    const y = this.position.y - this.height;
     ctx.beginPath();
-    ctx.rect(this.position.x, this.position.y, this.width, this.height);
+    ctx.rect(this.position.x, y, this.width, this.height);
     ctx.strokeStyle = 'black';
     ctx.stroke();
     ctx.fillStyle = 'red';
@@ -50,14 +70,18 @@ class Game {
     this.platGap = 100;
     this.platforms = [];
     this.createPlat();
-    const firstPlat = this.platforms.at(0);
-    this.dood = new Doodler(firstPlat.position);
+
+    const firstPlat = this.platforms[0].position.dup();
+    firstPlat.x += this.platforms[0].width / 2;
+    this.dood = new Doodler(firstPlat);
+
+    this.friction = 0.1;
 
 
   }
 
   createPlat() {
-    for (let i = 0; i < 6; i++) {
+    for (let i = 1; i < 7; i++) {
       const plat = new Platform(this.platGap * i);
       this.platforms.push(plat);
     }
@@ -78,13 +102,47 @@ class Game {
   }
 
   keyControl() {
+    // canvas.addEventListener('keydown', (e) => {
+    //   if (e.code === 'Space') this.dood.isAbove = false;
+    // });
+
+    // canvas.addEventListener('keyup', (e) => {
+    //   if (e.code === 'Space') this.dood.isAbove = true;
+    // });
     canvas.addEventListener('keydown', (e) => {
-      if (e.code === 'Space') this.dood.isAbove = false;
+      if (e.code === 'KeyA') this.dood.left = true;
+      if (e.code === 'KeyD') this.dood.right = true;
     });
 
     canvas.addEventListener('keyup', (e) => {
-      if (e.code === 'Space') this.dood.isAbove = true;
+      if (e.code === 'KeyA') this.dood.left = false;
+      if (e.code === 'KeyD') this.dood.right = false;
     });
+    // X moving
+    if (this.dood.left) this.dood.acc_x = -this.dood.acceleration;
+    if (this.dood.right) this.dood.acc_x = this.dood.acceleration;
+
+    if (!this.dood.right && !this.dood.left) this.dood.acc_x = 0;
+
+    this.dood.vel_x += this.dood.acc_x;
+    this.dood.vel_x *= 1 - this.friction;
+
+    this.dood.position.x += this.dood.vel_x;
+    // bouncing function
+    if (this.dood.position.y >= ctx.canvas.height) {
+      this.dood.vel_y = -this.dood.vel_y;
+    } else {
+      this.dood.vel_y += 1;
+    }
+    this.dood.position.y += this.dood.vel_y;
+
+    // teleportation between edges
+    if (this.dood.position.x + this.dood.widtha <= 0) {
+      this.dood.position.x = ctx.canvas.width - this.dood.width / 2;
+    }
+    if (this.dood.position.x >= ctx.canvas.width) {
+      this.dood.position.x = -this.dood.width / 2;
+    }
   }
 
   mainLoop() {
@@ -95,7 +153,7 @@ class Game {
       this.movePlat();
     });
     this.keyControl();
-    // this.dood.drawDood();
+    this.dood.drawDood();
     requestAnimationFrame(this.mainLoop.bind(this));
   }
   start() {
