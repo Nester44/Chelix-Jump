@@ -69,7 +69,10 @@ class Game {
       p.position.y++;
 
       if (p.position.y === canvas.clientHeight) {
-        p.position.y = 0 - p.height;
+        const x = Math.random() * (canvas.clientWidth - p.width);
+        const y = 0 - p.height;
+
+        p.position = new Vector(x, y);
       }
     });
   }
