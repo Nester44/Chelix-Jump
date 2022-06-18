@@ -39,7 +39,7 @@ class Doodler {
     this.position = position;
     this.position.x -= this.width / 2;
     this.position.y -= 50 + this.height;
-    this.isAbove = false;
+    this.isAbove = true;
 
     this.left = false;
     this.right = false;
@@ -66,6 +66,7 @@ class Doodler {
 class Game {
   constructor() {
     this.platGap = 100;
+    this.platSpeed = 0.5;
     this.platforms = [];
     this.createPlat();
 
@@ -88,7 +89,7 @@ class Game {
   movePlat() {
     if (!this.dood.isAbove) return;
     this.platforms.forEach((p) => {
-      p.position.y++;
+      p.position.y += this.platSpeed;
 
       if (p.position.y === canvas.clientHeight) {
         const x = Math.random() * (canvas.clientWidth - p.width);
@@ -100,32 +101,33 @@ class Game {
   }
 
   detColl() {
+    console.log('detColl invoked');
     const doodRight = this.dood.position.x + this.dood.width;
     const doodBottom = this.dood.position.y + this.dood.height;
-    for (const p of this.platforms) {
+
+    for (let i = 0; i < this.platforms.length; i++) {
+      const p = this.platforms[i];
+      console.log(p);
       const platRight = p.position.x + p.width;
       const platBottom = p.position.y + p.height;
       if (
         doodRight >= p.position.x &&
         this.dood.position.x <= platRight &&
         doodBottom <= platBottom &&
-        doodBottom >= p.position.y
+        doodBottom >= p.position.y &&
+        this.dood.vel_y >= 3
       ) {
+        console.log('colission');
+        this.dood.isJump = true;
         return true;
       } else {
-        return false;
+        this.dood.isJump = false;
       }
     }
+    return false;
   }
 
   keyControl() {
-    // canvas.addEventListener('keydown', (e) => {
-    //   if (e.code === 'Space') this.dood.isAbove = false;
-    // });
-
-    // canvas.addEventListener('keyup', (e) => {
-    //   if (e.code === 'Space') this.dood.isAbove = true;
-    // });
     canvas.addEventListener('keydown', (e) => {
       if (e.code === 'KeyA') this.dood.left = true;
       if (e.code === 'KeyD') this.dood.right = true;
@@ -146,10 +148,10 @@ class Game {
 
     this.dood.position.x += this.dood.vel_x;
     // bouncing function
-    if (this.detColl()) { // add collision function
-      this.dood.vel_y = -this.dood.vel_y; // this.dood.vel_y = -60;
+    if (this.detColl()) {
+      this.dood.vel_y = -15; // magic jmp height
     } else {
-      this.dood.vel_y += 1;
+      this.dood.vel_y += 0.5; // magic Y speed
     }
     this.dood.position.y += this.dood.vel_y;
 
