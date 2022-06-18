@@ -38,7 +38,7 @@ class Doodler {
 
     this.position = position;
     this.position.x -= this.width / 2;
-    this.position.y -= 50;
+    this.position.y -= 50 + this.height;
     this.isAbove = false;
 
     this.left = false;
@@ -54,10 +54,8 @@ class Doodler {
     this.acceleration = 1;
   }
   drawDood() {
-    // y = top border of the dood
-    const y = this.position.y - this.height;
     ctx.beginPath();
-    ctx.rect(this.position.x, y, this.width, this.height);
+    ctx.rect(this.position.x, this.position.y, this.width, this.height);
     ctx.strokeStyle = 'black';
     ctx.stroke();
     ctx.fillStyle = 'red';
@@ -101,6 +99,25 @@ class Game {
     });
   }
 
+  detColl() {
+    const doodRight = this.dood.position.x + this.dood.width;
+    const doodBottom = this.dood.position.y + this.dood.height;
+    for (const p of this.platforms) {
+      const platRight = p.position.x + p.width;
+      const platBottom = p.position.y + p.height;
+      if (
+        doodRight >= p.position.x &&
+        this.dood.position.x <= platRight &&
+        doodBottom <= platBottom &&
+        doodBottom >= p.position.y
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }
+
   keyControl() {
     // canvas.addEventListener('keydown', (e) => {
     //   if (e.code === 'Space') this.dood.isAbove = false;
@@ -129,8 +146,8 @@ class Game {
 
     this.dood.position.x += this.dood.vel_x;
     // bouncing function
-    if (this.dood.position.y >= ctx.canvas.height) {
-      this.dood.vel_y = -this.dood.vel_y;
+    if (this.detColl()) { // add collision function
+      this.dood.vel_y = -this.dood.vel_y; // this.dood.vel_y = -60;
     } else {
       this.dood.vel_y += 1;
     }
