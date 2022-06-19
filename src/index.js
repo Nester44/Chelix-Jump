@@ -55,8 +55,9 @@ class Doodler {
     this.vel_x = 0;
     this.acc_x = 0;
     this.acceleration = 1;
-
     this.jumpHeight = 15;
+
+    this.animID;
 
   }
   drawDood() {
@@ -120,8 +121,8 @@ class Game {
       if (
         doodRight >= p.position.x &&
         this.dood.position.x <= platRight &&
-        doodBottom <= platBottom &&
-        doodBottom >= p.position.y &&
+        doodBottom < platBottom &&
+        doodBottom > p.position.y &&
         this.dood.vel_y >= 3 // magic needed falling speed
       ) {
         this.dood.isJump = true;
@@ -159,6 +160,9 @@ class Game {
     if (this.dood.position.x >= ctx.canvas.width) {
       this.dood.position.x = -this.dood.width / 2;
     }
+
+    // gameOver check
+    if (this.dood.position.y >= ctx.canvas.height) this.gameOver();
   }
 
   keyControl() {
@@ -182,10 +186,14 @@ class Game {
     this.keyControl();
     this.move();
     this.dood.drawDood();
-    requestAnimationFrame(this.mainLoop.bind(this));
+    this.animID = requestAnimationFrame(this.mainLoop.bind(this));
   }
   start() {
-    requestAnimationFrame(this.mainLoop.bind(this));
+    this.animID = requestAnimationFrame(this.mainLoop.bind(this));
+  }
+  gameOver() {
+    cancelAnimationFrame(this.animID);
+    ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
   }
 }
 
