@@ -233,6 +233,9 @@ class Game {
   gameOver() {
     cancelAnimationFrame(this.animID);
     ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
+    const txt = 'Game Over';
+    const x = canvas.width / 2 - (ctx.measureText(txt).width / 2);
+    ctx.fillText(txt, x, canvas.height / 2);
   }
 
   mainScreen() {
@@ -246,10 +249,10 @@ class Game {
     function loop() {
       ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
       ctx.font = '3vw Arial';
-      // 3vw = 17.3 % of width
-      const x = canvas.clientWidth / 2 - (window.innerWidth * 0.173 / 2);
+      const txt = 'Doodle Jump';
+      const x = canvas.clientWidth / 2 - (ctx.measureText(txt).width / 2);
       const y = canvas.clientHeight * 0.175;
-      ctx.fillText('Doodle Jump', x, y);
+      ctx.fillText(txt, x, y);
       this.move();
       doodler.drawDood();
       platform.drawPlat();
