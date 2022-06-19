@@ -66,8 +66,9 @@ class Doodler {
 class Game {
   constructor() {
     this.platGap = 100;
-    this.platSpeed = 0.5;
+    this.platSpeed = 1;
     this.platforms = [];
+    this.moveHeight = 350;
     this.createPlat();
 
     const firstPlat = this.platforms[0].position.dup();
@@ -87,6 +88,7 @@ class Game {
   }
 
   movePlat() {
+    this.dood.isAbove = this.dood.position.y < this.moveHeight;
     if (!this.dood.isAbove) return;
     this.platforms.forEach((p) => {
       p.position.y += this.platSpeed;
@@ -101,13 +103,11 @@ class Game {
   }
 
   detColl() {
-    console.log('detColl invoked');
     const doodRight = this.dood.position.x + this.dood.width;
     const doodBottom = this.dood.position.y + this.dood.height;
 
     for (let i = 0; i < this.platforms.length; i++) {
       const p = this.platforms[i];
-      console.log(p);
       const platRight = p.position.x + p.width;
       const platBottom = p.position.y + p.height;
       if (
@@ -115,9 +115,8 @@ class Game {
         this.dood.position.x <= platRight &&
         doodBottom <= platBottom &&
         doodBottom >= p.position.y &&
-        this.dood.vel_y >= 3
+        this.dood.vel_y >= 3 // magic needed falling speed
       ) {
-        console.log('colission');
         this.dood.isJump = true;
         return true;
       } else {
@@ -168,7 +167,6 @@ class Game {
     ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
     this.platforms.forEach((p) => {
       p.drawPlat();
-
       this.movePlat();
     });
     this.keyControl();
