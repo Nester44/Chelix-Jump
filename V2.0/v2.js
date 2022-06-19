@@ -59,9 +59,6 @@ class Doodler {
     this.acceleration = 1;
     this.jumpHeight = 15;
     this.maxSpeed = 19;
-
-    this.animID;
-
   }
   drawDood() {
     ctx.beginPath();
@@ -80,8 +77,8 @@ class Doodler {
 
 class Game {
   constructor() {
-    this.platGap = 100;
-    this.platSpeed = 1;
+    this.platGap = 130;
+    this.platSpeed = 1.3;
     this.platforms = [];
     this.moveHeight = 350;
     this.createPlat();
@@ -92,12 +89,11 @@ class Game {
     this.dood = new Doodler(firstPlat);
 
     this.friction = 0.1;
-
-
   }
 
   createPlat() {
-    for (let i = 1; i < 7; i++) { // set border canvas.height / this.platGap
+    const platAmount = Math.round(ctx.canvas.height / this.platGap);
+    for (let i = 1; i < platAmount + 1; i++) {
       const plat = new Platform(this.platGap * i);
       this.platforms.push(plat);
     }
@@ -108,11 +104,9 @@ class Game {
     if (!this.dood.isAbove) return;
     this.platforms.forEach((p) => {
       p.position.y += this.platSpeed;
-
-      if (p.position.y === canvas.clientHeight) {
+      if (p.position.y >= canvas.clientHeight) {
         const x = Math.random() * (canvas.clientWidth - p.width);
         const y = 0 - p.height;
-
         p.position = new Vector(x, y);
       }
     });
