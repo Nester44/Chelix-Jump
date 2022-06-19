@@ -58,6 +58,7 @@ class Doodler {
     this.acc_x = 0;
     this.acceleration = 1;
     this.jumpHeight = 15;
+    this.maxSpeed = 19;
 
     this.animID;
 
@@ -153,7 +154,7 @@ class Game {
     // bouncing function
     if (this.detColl()) {
       this.dood.vel_y = -this.dood.jumpHeight;
-    } else {
+    } else if (Math.abs(this.dood.vel_y) < this.dood.maxSpeed) {
       this.dood.vel_y += this.dood.acc_y;
     }
 
@@ -193,6 +194,7 @@ class Game {
     this.keyControl();
     this.move();
     this.dood.drawDood();
+    this.dood.drawSpeed();
     this.animID = requestAnimationFrame(this.mainLoop.bind(this));
   }
   start() {
