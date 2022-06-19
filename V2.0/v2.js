@@ -84,12 +84,6 @@ class Game {
     this.platforms = [];
     this.neededSpeed = 3;
     this.moveHeight = 350;
-    this.createPlat();
-
-    const firstPlat = this.platforms[0].position.dup();
-    // get center of plat
-    firstPlat.x += this.platforms[0].width / 2;
-    this.dood = new Doodler(firstPlat);
 
     this.friction = 0.1;
 
@@ -215,12 +209,40 @@ class Game {
     this.drawScore();
     this.animID = requestAnimationFrame(this.mainLoop.bind(this));
   }
+
   start() {
+    this.createPlat();
+
+    const firstPlat = this.platforms[0].position.dup();
+    // get center of plat
+    firstPlat.x += this.platforms[0].width / 2;
+    this.dood = new Doodler(firstPlat);
     this.animID = requestAnimationFrame(this.mainLoop.bind(this));
   }
+
   gameOver() {
     cancelAnimationFrame(this.animID);
     ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
+  }
+
+  mainScreen() {
+    const platform = new Platform(100);
+    this.platforms.push(platform);
+    platform.position.x = 100;
+    const platPos = platform.position.dup();
+    platPos.x += platform.width / 2;
+    const doodler = new Doodler(platPos);
+    this.dood = doodler;
+    function loop() {
+      ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
+      ctx.font = '48px Arial';
+      ctx.fillText('Doodle Jump', 160, 150);
+      this.move();
+      doodler.drawDood();
+      platform.drawPlat();
+      requestAnimationFrame(loop.bind(this));
+    }
+    requestAnimationFrame(loop.bind(this));
   }
 }
 
@@ -228,3 +250,7 @@ startBtn.addEventListener('click', () => {
   const game = new Game();
   game.start();
 });
+
+const game = new Game();
+
+setTimeout(() => game.mainScreen(), 150);
