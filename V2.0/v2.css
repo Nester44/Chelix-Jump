@@ -97,6 +97,7 @@ body {
     overflow: hidden;
     color: #fff;
     font-family: 'Roboto', sans-serif;
+    background-color: rgb(70, 70, 70);
 }
 
 .wrapper {
@@ -114,6 +115,7 @@ body {
     display: flex;
     flex-direction: column;
     flex: 0 1 300px;
+    border-radius: 20px;
 }
 
 .title {
@@ -142,10 +144,13 @@ body {
     overflow: hidden;
 
     display: flex;
+    flex: 0 1 fit-content;
     flex-direction: column;
     background-color: rgb(91, 91, 91);
     padding: 20px 10px;
     margin: 0 -10px;
+    border-radius: 10px;
+
 }
 
 .settings__option {
@@ -162,6 +167,7 @@ body {
     width: 100px;
     margin-right: 20px;
     font-size: 14px;
+    text-transform: uppercase;
 }
 
 .settings__option input {
@@ -176,8 +182,11 @@ body {
 #canvas {
     border: 1px solid black;
     display: block;
-    margin: 0 auto;
+    margin: auto;
     background: #fffacc;
+    border-radius: 20px;
+    background: url('./images/background.png');
+    background-size: contain;
 }
 
 .start-btn {
@@ -185,7 +194,7 @@ body {
 
     width: 180px;
     height: 60px;
-    border-radius: 5px;
+    border-radius: 20px;
     border: 1px solid black;
 
     margin: 20px auto;

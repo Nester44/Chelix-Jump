@@ -36,7 +36,8 @@ class Platform {
     ctx.rect(this.position.x, this.position.y, this.width, this.height);
     ctx.strokeStyle = 'black';
     ctx.stroke();
-    ctx.fillStyle = 'blue';
+    // ctx.fillStyle = 'rgb(45, 45, 45)';
+    ctx.fillStyle = '#0175FF';
     ctx.fill();
   }
 }
