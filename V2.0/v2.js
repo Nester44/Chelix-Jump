@@ -23,7 +23,7 @@ class Vector {
 
 class Platform {
   constructor(y) {
-    this.width = 115;
+    this.width = +document.getElementById('width').value;
     this.height = 20;
     const x = Math.random() * (canvas.clientWidth - this.width);
     this.position = new Vector(x, canvas.clientHeight - y - this.height);
@@ -85,11 +85,6 @@ class Game {
     this.platGap = +document.getElementById('gap').value;
     this.platSpeed = +document.getElementById('speed').value;
     this.hardmode = document.getElementById('hardmode').checked;
-    console.log({
-      gap: this.platGap,
-      speed: this.platSpeed,
-      hardmode: this.hardmode
-    });
     this.platforms = [];
     this.neededSpeed = 3;
     this.moveHeight = canvas.height * 0.6;
@@ -227,6 +222,12 @@ class Game {
     // get center of plat
     firstPlat.x += this.platforms[0].width / 2;
     this.dood = new Doodler(firstPlat);
+    console.log({
+      gap: this.platGap,
+      speed: this.platSpeed,
+      hardmode: this.hardmode,
+      jumpHeight: this.dood.jumpHeight,
+    });
     this.animID = requestAnimationFrame(this.mainLoop.bind(this));
   }
 
