@@ -107,8 +107,12 @@ body {
 
 .start-btn {
     display: block;
+
     width: 130px;
     height: 40px;
+    border-radius: 5px;
+    border: 1px solid black;
+
     margin: auto;
     margin-top: 20px;
 
