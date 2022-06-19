@@ -73,7 +73,7 @@ class Doodler {
   drawSpeed() {
     ctx.beginPath();
     ctx.font = '24px Arial';
-    ctx.fillText(`Fall velocity: ${this.vel_y}`, 10, 50);
+    ctx.fillText(`Velocity: ${this.vel_y}`, 10, 80);
   }
 }
 
@@ -91,7 +91,13 @@ class Game {
     this.dood = new Doodler(firstPlat);
 
     this.friction = 0.1;
-    this.platVel = -1;
+
+    this.score = 0;
+  }
+  drawScore() {
+    ctx.beginPath();
+    ctx.font = '24px Arial';
+    ctx.fillText(`Score: ${this.score}`, 10, 50);
   }
 
   createPlat() {
@@ -164,6 +170,7 @@ class Game {
     // bouncing function
     if (this.detColl()) {
       this.dood.vel_y = -this.dood.jumpHeight;
+      this.score++;
     } else if (Math.abs(this.dood.vel_y) < this.dood.maxSpeed) {
       this.dood.vel_y += this.dood.acc_y;
     }
@@ -204,6 +211,7 @@ class Game {
     this.keyControl();
     this.move();
     this.dood.drawDood();
+    this.drawScore();
     this.animID = requestAnimationFrame(this.mainLoop.bind(this));
   }
   start() {
