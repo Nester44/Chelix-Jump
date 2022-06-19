@@ -82,6 +82,7 @@ class Game {
     this.platGap = 130;
     this.platSpeed = 1.3;
     this.platforms = [];
+    this.neededSpeed = 3;
     this.moveHeight = 350;
     this.createPlat();
 
@@ -147,7 +148,7 @@ class Game {
         this.dood.position.x <= platRight &&
         doodBottom <= platBottom &&
         doodBottom >= p.position.y &&
-        this.dood.vel_y >= 3 // magic needed falling speed
+        this.dood.vel_y >= this.neededSpeed // magic needed falling speed
       ) {
         this.dood.isJump = true;
         return true;
@@ -227,4 +228,3 @@ startBtn.addEventListener('click', () => {
   const game = new Game();
   game.start();
 });
-
