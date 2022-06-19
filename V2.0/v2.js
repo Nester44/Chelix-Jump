@@ -194,7 +194,6 @@ class Game {
     this.keyControl();
     this.move();
     this.dood.drawDood();
-    this.dood.drawSpeed();
     this.animID = requestAnimationFrame(this.mainLoop.bind(this));
   }
   start() {
