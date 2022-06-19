@@ -236,7 +236,7 @@ class Game {
     function loop() {
       ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
       ctx.font = '48px Arial';
-      ctx.fillText('Doodle Jump', 160, 150);
+      ctx.fillText('Doodle Jump', 160, 140);
       this.move();
       doodler.drawDood();
       platform.drawPlat();
