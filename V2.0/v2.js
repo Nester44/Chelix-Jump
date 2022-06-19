@@ -5,7 +5,6 @@ const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 const startBtn = document.querySelector('.start-btn');
 
-
 class Vector {
   constructor(x, y) {
     this.x = x;
@@ -62,14 +61,14 @@ class Doodler {
     this.acceleration = 1;
     this.jumpHeight = 15;
     this.maxSpeed = 19;
+
+    this.skin = new Image(50, 80);
+    this.skin.src = './images/doodOleg.png';
+
   }
   drawDood() {
     ctx.beginPath();
-    ctx.rect(this.position.x, this.position.y, this.width, this.height);
-    ctx.strokeStyle = 'black';
-    ctx.stroke();
-    ctx.fillStyle = 'red';
-    ctx.fill();
+    ctx.drawImage(this.skin, this.position.x, this.position.y);
   }
   drawSpeed() {
     ctx.beginPath();
