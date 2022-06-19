@@ -12,6 +12,9 @@ class Vector {
   dup() {
     return new Vector(this.x, this.y);
   }
+  add(v) {
+    return new Vector(this.x + v.x, this.y + v.y);
+  }
 }
 
 class Platform {
@@ -46,12 +49,15 @@ class Doodler {
     this.isJump = false;
     this.isFall = false;
 
-    this.acc_y = 1;
+    this.acc_y = 0.5;
     this.vel_y = 0;
 
     this.vel_x = 0;
     this.acc_x = 0;
     this.acceleration = 1;
+
+    this.jumpHeight = 15;
+
   }
   drawDood() {
     ctx.beginPath();
@@ -72,6 +78,7 @@ class Game {
     this.createPlat();
 
     const firstPlat = this.platforms[0].position.dup();
+    // get center of plat
     firstPlat.x += this.platforms[0].width / 2;
     this.dood = new Doodler(firstPlat);
 
@@ -81,7 +88,7 @@ class Game {
   }
 
   createPlat() {
-    for (let i = 1; i < 7; i++) {
+    for (let i = 1; i < 7; i++) { // set border canvas.height / this.platGap
       const plat = new Platform(this.platGap * i);
       this.platforms.push(plat);
     }
@@ -126,16 +133,7 @@ class Game {
     return false;
   }
 
-  keyControl() {
-    canvas.addEventListener('keydown', (e) => {
-      if (e.code === 'KeyA') this.dood.left = true;
-      if (e.code === 'KeyD') this.dood.right = true;
-    });
-
-    canvas.addEventListener('keyup', (e) => {
-      if (e.code === 'KeyA') this.dood.left = false;
-      if (e.code === 'KeyD') this.dood.right = false;
-    });
+  move() {
     // X moving
     if (this.dood.left) this.dood.acc_x = -this.dood.acceleration;
     if (this.dood.right) this.dood.acc_x = this.dood.acceleration;
@@ -144,14 +142,14 @@ class Game {
 
     this.dood.vel_x += this.dood.acc_x;
     this.dood.vel_x *= 1 - this.friction;
-
-    this.dood.position.x += this.dood.vel_x;
     // bouncing function
     if (this.detColl()) {
-      this.dood.vel_y = -15; // magic jmp height
+      this.dood.vel_y = -this.dood.jumpHeight;
     } else {
-      this.dood.vel_y += 0.5; // magic Y speed
+      this.dood.vel_y += this.dood.acc_y;
     }
+
+    this.dood.position.x += this.dood.vel_x;
     this.dood.position.y += this.dood.vel_y;
 
     // teleportation between edges
@@ -163,6 +161,18 @@ class Game {
     }
   }
 
+  keyControl() {
+    canvas.addEventListener('keydown', (e) => {
+      if (e.code === 'KeyA') this.dood.left = true;
+      if (e.code === 'KeyD') this.dood.right = true;
+    });
+
+    canvas.addEventListener('keyup', (e) => {
+      if (e.code === 'KeyA') this.dood.left = false;
+      if (e.code === 'KeyD') this.dood.right = false;
+    });
+  }
+
   mainLoop() {
     ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
     this.platforms.forEach((p) => {
@@ -170,6 +180,7 @@ class Game {
       this.movePlat();
     });
     this.keyControl();
+    this.move();
     this.dood.drawDood();
     requestAnimationFrame(this.mainLoop.bind(this));
   }
