@@ -95,8 +95,78 @@ body {
     margin: 0;
     height: 100%;
     overflow: hidden;
+    color: #fff;
+    font-family: 'Roboto', sans-serif;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
     padding: 20px;
 }
+
+.main-row {
+    display: flex;
+    width: 100%;
+}
+
+.panel {
+    display: flex;
+    flex-direction: column;
+    flex: 0 1 300px;
+}
+
+.title {
+    color: #fff;
+    font-size: 24px;
+    text-align: center;
+}
+
+.settings {
+    background-color: gray;
+    padding: 20px;
+    overflow: hidden;
+    visibility: hidden;
+}
+
+.settings__title {
+    margin-bottom: 20px;
+}
+
+.settings__options {
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(91, 91, 91);
+    padding: 20px 10px;
+    margin: 0 -10px;
+}
+
+.settings__option {
+    margin-bottom: 40px;
+    position: relative;
+}
+
+.settings__option:last-child {
+    margin: 0;
+}
+
+.settings__option label {
+    display: inline-block;
+    width: 100px;
+    margin-right: 20px;
+    font-size: 14px;
+}
+
+.settings__option input {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+
 
 #canvas {
     border: 1px solid black;
@@ -113,8 +183,7 @@ body {
     border-radius: 5px;
     border: 1px solid black;
 
-    margin: auto;
-    margin-top: 20px;
+    margin: 20px auto;
 
     text-transform: uppercase;
     font-size: 18px;

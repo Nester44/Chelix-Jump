@@ -7,12 +7,33 @@
     <title>Doodle jump</title>
     <link rel="stylesheet" href="./v2.css">
     <link rel="icon" type="image/x-icon" href="../img/favicon-16x16.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
-    <canvas id="canvas" tabindex="0" width="600" height="600"></canvas>
-    <button class="start-btn">Start Game</button>
-    <script src="./v2.js"></script>
+    <div class="wrapper">
+        <div class="main-row">
+            <div class="panel settings">
+                <h2 class="settings__title title">Settings</h2>
+                <div class="settings__options">
+                    <div class="settings__option">
+                        <label for="gap">Platform gap</label>
+                        <input type="range" id="gap" name="gap" min="100" max="500" step="30" value="130">
+                    </div>
+                    <div class="settings__option">
+                        <label for="speed">Platform speed</label>
+                        <input type="range" id="speed" name="speed" min="0.5" max="5.5" step="0.2" value="1.3">
+                    </div>
+                </div>
+            </div>
+            <canvas id="canvas" tabindex="0" width="600" height="600"></canvas>
+            <div class="panel"></div>
+        </div>
+        <button class="start-btn">Start Game</button>
+        <script src="./v2.js"></script>
+    </div>
 </body>
 
 </html>

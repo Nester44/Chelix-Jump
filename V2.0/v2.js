@@ -3,6 +3,8 @@
 
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
+
+const settings = document.querySelector('.settings');
 const startBtn = document.querySelector('.start-btn');
 
 class Vector {
@@ -79,8 +81,10 @@ class Doodler {
 
 class Game {
   constructor() {
-    this.platGap = 130;
-    this.platSpeed = 1.3;
+    this.platGap = +document.getElementById('gap').value;
+    this.platSpeed = +document.getElementById('speed').value;
+    console.log('Choosen gap: ', this.platGap);
+    console.log('Choosen speed: ', this.platSpeed);
     this.platforms = [];
     this.neededSpeed = 3;
     this.moveHeight = 350;
@@ -251,6 +255,9 @@ startBtn.addEventListener('click', () => {
   game.start();
 });
 
+function showSettings() {
+  settings.style.visibility = 'visible';
+}
 const game = new Game();
 
 setTimeout(() => game.mainScreen(), 150);
