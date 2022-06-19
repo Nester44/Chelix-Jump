@@ -245,8 +245,11 @@ class Game {
     this.dood = doodler;
     function loop() {
       ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
-      ctx.font = '48px Arial';
-      ctx.fillText('Doodle Jump', 160, 140);
+      ctx.font = '3vw Arial';
+      // 3vw = 17.3 % of width
+      const x = canvas.clientWidth / 2 - (window.innerWidth * 0.173 / 2);
+      const y = canvas.clientHeight * 0.175;
+      ctx.fillText('Doodle Jump', x, y);
       this.move();
       doodler.drawDood();
       platform.drawPlat();
