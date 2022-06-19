@@ -25,6 +25,9 @@ class Platform {
     this.height = 20;
     const x = Math.random() * (canvas.clientWidth - this.width);
     this.position = new Vector(x, canvas.clientHeight - y - this.height);
+
+    this.isMoving = false;
+    this.vel = 3;
   }
   drawPlat() {
     ctx.beginPath();
@@ -44,7 +47,7 @@ class Doodler {
     this.position = position;
     this.position.x -= this.width / 2;
     this.position.y -= 50 + this.height;
-    this.isAbove = true;
+    this.isAbove = false;
 
     this.left = false;
     this.right = false;
@@ -89,17 +92,31 @@ class Game {
     this.dood = new Doodler(firstPlat);
 
     this.friction = 0.1;
+    this.platVel = -1;
   }
 
   createPlat() {
     const platAmount = Math.round(ctx.canvas.height / this.platGap);
     for (let i = 1; i < platAmount + 1; i++) {
       const plat = new Platform(this.platGap * i);
+      // choosing mooving platforms
+      // if (i % 2 === 0) plat.isMoving = true;
       this.platforms.push(plat);
     }
   }
 
-  movePlat() {
+  movePlatX() {
+    this.platforms.filter((plat) => plat.isMoving).forEach((plat) => {
+      if (plat.position.x <= 0 ||
+          plat.position.x + plat.width >= ctx.canvas.width) {
+        plat.vel = -plat.vel;
+      }
+      plat.position.x += plat.vel;
+    });
+
+  }
+
+  moveDownPlat() {
     this.dood.isAbove = this.dood.position.y < this.moveHeight;
     if (!this.dood.isAbove) return;
     this.platforms.forEach((p) => {
@@ -183,7 +200,7 @@ class Game {
     ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
     this.platforms.forEach((p) => {
       p.drawPlat();
-      this.movePlat();
+      this.moveDownPlat();
     });
     this.keyControl();
     this.move();
