@@ -3,6 +3,8 @@
 
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
+const startBtn = document.querySelector('.startBtn');
+
 
 class Vector {
   constructor(x, y) {
@@ -197,5 +199,8 @@ class Game {
   }
 }
 
-const game = new Game();
-game.start();
+startBtn.addEventListener('click', () => {
+  const game = new Game();
+  game.start();
+});
+

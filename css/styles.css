@@ -104,3 +104,11 @@ body {
     margin: 0 auto;
     background: #fffacc;
 }
+
+.startBtn {
+    display: block;
+    width: 130px;
+    height: 40px;
+    margin: auto;
+    margin-top: 20px;
+}
