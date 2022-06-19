@@ -62,7 +62,7 @@ class Doodler {
     this.vel_x = 0;
     this.acc_x = 0;
     this.acceleration = 1;
-    this.jumpHeight = 17;
+    this.jumpHeight = +document.getElementById('height').value;
     this.maxSpeed = 19;
 
     this.skin = new Image(50, 80);
@@ -175,7 +175,7 @@ class Game {
     if (this.detColl()) {
       this.dood.vel_y = -this.dood.jumpHeight;
       this.score++;
-    } else if (Math.abs(this.dood.vel_y) < this.dood.maxSpeed) {
+    } else if (this.dood.vel_y < this.dood.maxSpeed) {
       this.dood.vel_y += this.dood.acc_y;
     }
 
