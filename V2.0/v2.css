@@ -126,7 +126,6 @@ body {
     background-color: gray;
     padding: 20px;
     overflow: hidden;
-    visibility: hidden;
 }
 
 .settings__title {

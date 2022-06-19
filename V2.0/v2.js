@@ -4,7 +4,6 @@
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
-const settings = document.querySelector('.settings');
 const startBtn = document.querySelector('.start-btn');
 
 class Vector {
@@ -83,8 +82,12 @@ class Game {
   constructor() {
     this.platGap = +document.getElementById('gap').value;
     this.platSpeed = +document.getElementById('speed').value;
-    console.log('Choosen gap: ', this.platGap);
-    console.log('Choosen speed: ', this.platSpeed);
+    this.hardmode = document.getElementById('hardmode').checked;
+    console.log({
+      gap: this.platGap,
+      speed: this.platSpeed,
+      hardmode: this.hardmode
+    });
     this.platforms = [];
     this.neededSpeed = 3;
     this.moveHeight = 350;
@@ -104,7 +107,7 @@ class Game {
     for (let i = 1; i < platAmount + 1; i++) {
       const plat = new Platform(this.platGap * i);
       // choosing mooving platforms
-      // if (i % 2 === 0) plat.isMoving = true;
+      if (this.hardmode) plat.isMoving = true;
       this.platforms.push(plat);
     }
   }
@@ -209,6 +212,7 @@ class Game {
     });
     this.keyControl();
     this.move();
+    this.movePlatX();
     this.dood.drawDood();
     this.drawScore();
     this.animID = requestAnimationFrame(this.mainLoop.bind(this));
@@ -255,9 +259,6 @@ startBtn.addEventListener('click', () => {
   game.start();
 });
 
-function showSettings() {
-  settings.style.visibility = 'visible';
-}
 const game = new Game();
 
 setTimeout(() => game.mainScreen(), 150);
