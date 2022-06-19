@@ -70,6 +70,11 @@ class Doodler {
     ctx.fillStyle = 'red';
     ctx.fill();
   }
+  drawSpeed() {
+    ctx.beginPath();
+    ctx.font = '24px Arial';
+    ctx.fillText(`Fall velocity: ${this.vel_y}`, 10, 50);
+  }
 }
 
 class Game {
