@@ -111,4 +111,6 @@ body {
     height: 40px;
     margin: auto;
     margin-top: 20px;
+
+    text-transform: uppercase;
 }

@@ -123,8 +123,8 @@ class Game {
       if (
         doodRight >= p.position.x &&
         this.dood.position.x <= platRight &&
-        doodBottom < platBottom &&
-        doodBottom > p.position.y &&
+        doodBottom <= platBottom &&
+        doodBottom >= p.position.y &&
         this.dood.vel_y >= 3 // magic needed falling speed
       ) {
         this.dood.isJump = true;
