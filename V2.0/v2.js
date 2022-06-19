@@ -168,12 +168,12 @@ class Game {
   }
 
   keyControl() {
-    canvas.addEventListener('keydown', (e) => {
+    window.addEventListener('keydown', (e) => {
       if (e.code === 'KeyA') this.dood.left = true;
       if (e.code === 'KeyD') this.dood.right = true;
     });
 
-    canvas.addEventListener('keyup', (e) => {
+    window.addEventListener('keyup', (e) => {
       if (e.code === 'KeyA') this.dood.left = false;
       if (e.code === 'KeyD') this.dood.right = false;
     });
