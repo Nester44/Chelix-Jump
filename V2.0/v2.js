@@ -2,6 +2,8 @@
 'use strict';
 
 const canvas = document.getElementById('canvas');
+canvas.height = window.innerHeight * 0.85;
+canvas.width = window.innerWidth * 0.45;
 const ctx = canvas.getContext('2d');
 
 const startBtn = document.querySelector('.start-btn');
@@ -60,7 +62,7 @@ class Doodler {
     this.vel_x = 0;
     this.acc_x = 0;
     this.acceleration = 1;
-    this.jumpHeight = 15;
+    this.jumpHeight = 17;
     this.maxSpeed = 19;
 
     this.skin = new Image(50, 80);
@@ -90,7 +92,7 @@ class Game {
     });
     this.platforms = [];
     this.neededSpeed = 3;
-    this.moveHeight = 350;
+    this.moveHeight = canvas.height * 0.6;
 
     this.friction = 0.1;
 
