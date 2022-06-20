@@ -2,11 +2,16 @@
 'use strict';
 
 const canvas = document.getElementById('canvas');
-canvas.height = window.innerHeight * 0.85;
-canvas.width = window.innerWidth * 0.45;
 const ctx = canvas.getContext('2d');
-
+const screenHud = document.querySelector('.main-screen');
 const startBtn = document.querySelector('.start-btn');
+
+function adjustScreen() {
+  canvas.height = window.innerHeight * 0.85;
+  canvas.width = window.innerWidth * 0.45;
+  screenHud.style.height = `${canvas.height}px`;
+  screenHud.style.width = `${canvas.width}px`;
+}
 
 const getSettings = () => ({
   platGap: +document.getElementById('gap').value,
@@ -282,7 +287,7 @@ startBtn.addEventListener('click', () => {
   const game = new Game();
   game.start();
 });
-
+adjustScreen();
 const game = new Game();
 
 setTimeout(() => game.mainScreen(), 150);
