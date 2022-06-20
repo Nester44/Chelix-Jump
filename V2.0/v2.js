@@ -9,25 +9,26 @@ const skins = document.querySelectorAll('.skin-bar__option');
 
 const getSkinSrc = (value) => './images/skins/' + value + '.png';
 
-function adjustScreen() {
+const adjustScreen = () => {
   canvas.height = window.innerHeight * 0.85;
   if (window.innerWidth >= 600) {
     canvas.width = window.innerWidth * 0.45;
   } else {
     canvas.width = window.innerWidth * 0.85;
   }
-}
-function chooseSkin(option) {
+};
+
+const chooseSkin = (option) => {
   for (const skin of skins) {
     skin.id = '';
   }
   option.id = 'selected';
   window.game.dood.skin.src = getSkinSrc(option.value);
-}
+};
 
 const getSettings = () => ({
-  platGap: +document.getElementById('gap').value,
-  platSpeed: +document.getElementById('speed').value,
+  platGap: Number(document.getElementById('gap').value),
+  platSpeed: Number(document.getElementById('speed').value),
   hardmode: document.getElementById('hardmode').checked,
 });
 
@@ -36,9 +37,11 @@ class Vector {
     this.x = x;
     this.y = y;
   }
+
   dup() {
     return new Vector(this.x, this.y);
   }
+
   add(v) {
     return new Vector(this.x + v.x, this.y + v.y);
   }
@@ -46,17 +49,22 @@ class Vector {
 
 class Platform {
   constructor(y) {
-    this.width = +document.getElementById('width').value;
+    this.width = Number(document.getElementById('width').value);
     this.height = 20;
     const x = Math.random() * (canvas.clientWidth - this.width);
-    this.position = new Vector(x, canvas.clientHeight - y - this.height);
+    y =  canvas.clientHeight - y - this.height;
+    this.position = new Vector(x, y);
 
     this.isMoving = false;
 
     // getting random direction
-    Math.random() < 0.5 ?
-      this.vel = 3 : this.vel = -3;
+    this.vel = this.randomDirection(3);
   }
+
+  randomDirection(velocity) {
+    return Math.random() > 0.5 ? velocity : -velocity;
+  }
+
   drawPlat() {
     ctx.beginPath();
     ctx.rect(this.position.x, this.position.y, this.width, this.height);
@@ -74,7 +82,7 @@ class Doodler {
 
     this.position = position;
     this.position.x -= this.width / 2;
-    this.position.y -= 50 + this.height;
+    this.position.y -= this.width + this.height;
     this.isAbove = false;
 
     this.left = false;
@@ -88,7 +96,7 @@ class Doodler {
     this.vel_x = 0;
     this.acc_x = 0;
     this.acceleration = 1;
-    this.jumpHeight = +document.getElementById('height').value;
+    this.jumpHeight = Number(document.getElementById('height').value);
     this.maxSpeed = 19;
 
     this.skin = new Image(50, 80);
@@ -96,10 +104,12 @@ class Doodler {
     this.skin.src = getSkinSrc(choosenSkin);
 
   }
+
   drawDood() {
     ctx.beginPath();
     ctx.drawImage(this.skin, this.position.x, this.position.y);
   }
+
   drawSpeed() {
     ctx.beginPath();
     ctx.font = '24px Arial';
@@ -179,7 +189,7 @@ class Game {
         this.dood.position.x <= platRight &&
         doodBottom <= platBottom &&
         doodBottom >= p.position.y &&
-        this.dood.vel_y >= this.neededSpeed // magic needed falling speed
+        this.dood.vel_y >= this.neededSpeed
       ) {
         this.dood.isJump = true;
         return true;
@@ -280,7 +290,7 @@ class Game {
     platPos.x += platform.width / 2;
     const doodler = new Doodler(platPos);
     this.dood = doodler;
-    function loop() {
+    const loop = () => {
       ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
       ctx.font = '3vw Arial';
       const txt = 'Doodle Jump';
@@ -291,7 +301,7 @@ class Game {
       doodler.drawDood();
       platform.drawPlat();
       requestAnimationFrame(loop.bind(this));
-    }
+    };
     requestAnimationFrame(loop.bind(this));
   }
 }
