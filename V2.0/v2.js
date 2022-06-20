@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 'use strict';
 
 const canvas = document.getElementById('canvas');
