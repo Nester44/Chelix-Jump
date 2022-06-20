@@ -3,11 +3,19 @@
 
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
+
 const startBtn = document.querySelector('.start-btn');
+const skins = document.querySelectorAll('.skin-bar__option');
 
 function adjustScreen() {
   canvas.height = window.innerHeight * 0.85;
   canvas.width = window.innerWidth * 0.45;
+}
+function chooseSkin(option) {
+  for (const skin of skins) {
+    skin.id = '';
+  }
+  option.id = 'selected';
 }
 
 const getSettings = () => ({
@@ -281,6 +289,11 @@ class Game {
 }
 
 adjustScreen();
+
+skins.forEach((option) => {
+  option.addEventListener('click', (option) => chooseSkin(option.target));
+});
+
 startBtn.addEventListener('click', () => {
   const game = new Game();
   game.start();
