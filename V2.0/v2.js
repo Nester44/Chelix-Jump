@@ -91,7 +91,8 @@ class Doodler {
     this.maxSpeed = 19;
 
     this.skin = new Image(50, 80);
-    this.skin.src = './images/skins/doodOleg.png';
+    const choosenSkin = document.getElementById('selected').value;
+    this.skin.src = skinSources[choosenSkin];
 
   }
   drawDood() {
