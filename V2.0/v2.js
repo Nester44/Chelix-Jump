@@ -90,7 +90,11 @@ class Doodler {
     this.isFall = false;
 
     this.accY = 0.5;
+<<<<<<< HEAD
     this.velY = 0;
+=======
+    this.accY = 0;
+>>>>>>> d051f58e9cabde3c76b644ef950e15414db72859
 
     this.velX = 0;
     this.accX = 0;
@@ -112,7 +116,11 @@ class Doodler {
   drawSpeed() {
     ctx.beginPath();
     ctx.font = '24px Arial';
+<<<<<<< HEAD
     ctx.fillText(`Velocity: ${this.velY}`, 10, 80);
+=======
+    ctx.fillText(`Velocity: ${this.accY}`, 10, 80);
+>>>>>>> d051f58e9cabde3c76b644ef950e15414db72859
   }
 }
 
@@ -188,7 +196,11 @@ class Game {
         this.dood.position.x <= platRight &&
         doodBottom <= platBottom &&
         doodBottom >= p.position.y &&
+<<<<<<< HEAD
         this.dood.velY >= this.neededSpeed
+=======
+        this.dood.accY >= this.neededSpeed
+>>>>>>> d051f58e9cabde3c76b644ef950e15414db72859
       ) {
         this.dood.isJump = true;
         return true;
@@ -210,6 +222,7 @@ class Game {
     this.dood.velX *= 1 - this.friction;
     // bouncing function
     if (this.detColl()) {
+<<<<<<< HEAD
       this.dood.velY = -this.dood.jumpHeight;
       this.score++;
     } else if (this.dood.velY < this.dood.maxSpeed) {
@@ -218,6 +231,16 @@ class Game {
 
     this.dood.position.x += this.dood.velX;
     this.dood.position.y += this.dood.velY;
+=======
+      this.dood.accY = -this.dood.jumpHeight;
+      this.score++;
+    } else if (this.dood.accY < this.dood.maxSpeed) {
+      this.dood.accY += this.dood.accY;
+    }
+
+    this.dood.position.x += this.dood.velX;
+    this.dood.position.y += this.dood.accY;
+>>>>>>> d051f58e9cabde3c76b644ef950e15414db72859
 
     // teleportation between edges
     if (this.dood.position.x + this.dood.width <= 0) {
