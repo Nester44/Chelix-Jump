@@ -309,6 +309,7 @@ class Game {
 adjustScreen();
 
 startBtn.addEventListener('click', () => {
+  cancelAnimationFrame(window.game.animID);
   window.game = new Game();
   window.game.start();
 });
