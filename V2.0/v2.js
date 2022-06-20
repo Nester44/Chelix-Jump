@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 'use strict';
 
 const canvas = document.getElementById('canvas');
@@ -5,6 +6,11 @@ const ctx = canvas.getContext('2d');
 
 const startBtn = document.querySelector('.start-btn');
 const skins = document.querySelectorAll('.skin-bar__option');
+
+const skinSources = {
+  oleg: './images/skins/doodOleg.png',
+  gordon: './images/skins/gordon.png'
+};
 
 function adjustScreen() {
   canvas.height = window.innerHeight * 0.85;
@@ -15,6 +21,7 @@ function chooseSkin(option) {
     skin.id = '';
   }
   option.id = 'selected';
+  window.game.dood.skin.src = skinSources[option.value];
 }
 
 const getSettings = () => ({
@@ -84,7 +91,7 @@ class Doodler {
     this.maxSpeed = 19;
 
     this.skin = new Image(50, 80);
-    this.skin.src = './images/doodOleg.png';
+    this.skin.src = './images/skins/doodOleg.png';
 
   }
   drawDood() {
@@ -289,14 +296,15 @@ class Game {
 
 adjustScreen();
 
+startBtn.addEventListener('click', () => {
+  window.game = new Game();
+  window.game.start();
+});
+window.game = new Game();
+
 skins.forEach((option) => {
+  option.style.background = `url('${skinSources[option.value]}')`;
   option.addEventListener('click', (option) => chooseSkin(option.target));
 });
 
-startBtn.addEventListener('click', () => {
-  const game = new Game();
-  game.start();
-});
-const game = new Game();
-
-setTimeout(() => game.mainScreen(), 150);
+setTimeout(() => window.game.mainScreen(), 150);

@@ -216,8 +216,7 @@ body {
     height: 80px;
     background-color: black;
     border-radius: 10px;
-    background: url('./images/doodOleg.png');
-    cursor: pointer;
+    font-size: 0px;
 }
 
 .skin-bar__option:hover {
