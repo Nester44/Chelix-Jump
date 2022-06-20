@@ -11,7 +11,11 @@ const getSkinSrc = (value) => './images/skins/' + value + '.png';
 
 function adjustScreen() {
   canvas.height = window.innerHeight * 0.85;
-  canvas.width = window.innerWidth * 0.45;
+  if (window.innerWidth > 800) {
+    canvas.width = window.innerWidth * 0.45;
+  } else {
+    canvas.width = window.innerWidth * 0.85;
+  }
 }
 function chooseSkin(option) {
   for (const skin of skins) {
