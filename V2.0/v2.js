@@ -8,6 +8,12 @@ const ctx = canvas.getContext('2d');
 
 const startBtn = document.querySelector('.start-btn');
 
+const getSettings = () => ({
+  platGap: +document.getElementById('gap').value,
+  platSpeed: +document.getElementById('speed').value,
+  hardmode: document.getElementById('hardmode').checked,
+});
+
 class Vector {
   constructor(x, y) {
     this.x = x;
@@ -29,14 +35,16 @@ class Platform {
     this.position = new Vector(x, canvas.clientHeight - y - this.height);
 
     this.isMoving = false;
-    this.vel = 3;
+
+    // getting random direction
+    Math.random() < 0.5 ?
+      this.vel = 3 : this.vel = -3;
   }
   drawPlat() {
     ctx.beginPath();
     ctx.rect(this.position.x, this.position.y, this.width, this.height);
     ctx.strokeStyle = 'black';
     ctx.stroke();
-    // ctx.fillStyle = 'rgb(45, 45, 45)';
     ctx.fillStyle = '#0175FF';
     ctx.fill();
   }
@@ -83,9 +91,7 @@ class Doodler {
 
 class Game {
   constructor() {
-    this.platGap = +document.getElementById('gap').value;
-    this.platSpeed = +document.getElementById('speed').value;
-    this.hardmode = document.getElementById('hardmode').checked;
+    this.defineSettings();
     this.platforms = [];
     this.neededSpeed = 3;
     this.moveHeight = canvas.height * 0.6;
@@ -94,6 +100,14 @@ class Game {
 
     this.score = 0;
   }
+
+  defineSettings() {
+    const { platGap, platSpeed, hardmode } = getSettings();
+    this.platGap = platGap;
+    this.platSpeed = platSpeed;
+    this.hardmode = hardmode;
+  }
+
   drawScore() {
     ctx.beginPath();
     ctx.font = '24px Arial';
