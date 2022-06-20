@@ -3,14 +3,11 @@
 
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
-const screenHud = document.querySelector('.main-screen');
 const startBtn = document.querySelector('.start-btn');
 
 function adjustScreen() {
   canvas.height = window.innerHeight * 0.85;
   canvas.width = window.innerWidth * 0.45;
-  screenHud.style.height = `${canvas.height}px`;
-  screenHud.style.width = `${canvas.width}px`;
 }
 
 const getSettings = () => ({
@@ -283,11 +280,11 @@ class Game {
   }
 }
 
+adjustScreen();
 startBtn.addEventListener('click', () => {
   const game = new Game();
   game.start();
 });
-adjustScreen();
 const game = new Game();
 
 setTimeout(() => game.mainScreen(), 150);
