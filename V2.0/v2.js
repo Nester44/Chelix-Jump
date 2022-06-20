@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 'use strict';
 
 const canvas = document.getElementById('canvas');
@@ -90,11 +89,11 @@ class Doodler {
     this.isJump = false;
     this.isFall = false;
 
-    this.acc_y = 0.5;
-    this.vel_y = 0;
+    this.accY = 0.5;
+    this.velY = 0;
 
-    this.vel_x = 0;
-    this.acc_x = 0;
+    this.velX = 0;
+    this.accX = 0;
     this.acceleration = 1;
     this.jumpHeight = Number(document.getElementById('height').value);
     this.maxSpeed = 19;
@@ -113,7 +112,7 @@ class Doodler {
   drawSpeed() {
     ctx.beginPath();
     ctx.font = '24px Arial';
-    ctx.fillText(`Velocity: ${this.vel_y}`, 10, 80);
+    ctx.fillText(`Velocity: ${this.velY}`, 10, 80);
   }
 }
 
@@ -189,7 +188,7 @@ class Game {
         this.dood.position.x <= platRight &&
         doodBottom <= platBottom &&
         doodBottom >= p.position.y &&
-        this.dood.vel_y >= this.neededSpeed
+        this.dood.velY >= this.neededSpeed
       ) {
         this.dood.isJump = true;
         return true;
@@ -202,23 +201,23 @@ class Game {
 
   move() {
     // X moving
-    if (this.dood.left) this.dood.acc_x = -this.dood.acceleration;
-    if (this.dood.right) this.dood.acc_x = this.dood.acceleration;
+    if (this.dood.left) this.dood.accX = -this.dood.acceleration;
+    if (this.dood.right) this.dood.accX = this.dood.acceleration;
 
-    if (!this.dood.right && !this.dood.left) this.dood.acc_x = 0;
+    if (!this.dood.right && !this.dood.left) this.dood.accX = 0;
 
-    this.dood.vel_x += this.dood.acc_x;
-    this.dood.vel_x *= 1 - this.friction;
+    this.dood.velX += this.dood.accX;
+    this.dood.velX *= 1 - this.friction;
     // bouncing function
     if (this.detColl()) {
-      this.dood.vel_y = -this.dood.jumpHeight;
+      this.dood.velY = -this.dood.jumpHeight;
       this.score++;
-    } else if (this.dood.vel_y < this.dood.maxSpeed) {
-      this.dood.vel_y += this.dood.acc_y;
+    } else if (this.dood.velY < this.dood.maxSpeed) {
+      this.dood.velY += this.dood.accY;
     }
 
-    this.dood.position.x += this.dood.vel_x;
-    this.dood.position.y += this.dood.vel_y;
+    this.dood.position.x += this.dood.velX;
+    this.dood.position.y += this.dood.velY;
 
     // teleportation between edges
     if (this.dood.position.x + this.dood.width <= 0) {
@@ -309,6 +308,7 @@ class Game {
 adjustScreen();
 
 startBtn.addEventListener('click', () => {
+  cancelAnimationFrame(window.game.animID);
   window.game = new Game();
   window.game.start();
 });
