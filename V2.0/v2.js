@@ -11,7 +11,7 @@ const getSkinSrc = (value) => './images/skins/' + value + '.png';
 
 function adjustScreen() {
   canvas.height = window.innerHeight * 0.85;
-  if (window.innerWidth > 800) {
+  if (window.innerWidth >= 600) {
     canvas.width = window.innerWidth * 0.45;
   } else {
     canvas.width = window.innerWidth * 0.85;
