@@ -217,12 +217,21 @@ body {
     background-color: black;
     border-radius: 10px;
     font-size: 0px;
+    cursor: pointer;
+    transition: all .1s ease-in-out;
 }
 
 .skin-bar__option:hover {
+    transform: scale(1.1);
     box-shadow: inset black 0 0 7px 1px;
 }
 
+.skin-bar__option:active {
+    transform: scale(0.95);
+}
+
 #selected {
+    transform: scale(1.1);
     box-shadow: #EDE1D3 0 0 10px 1px;
+    cursor: default;
 }
