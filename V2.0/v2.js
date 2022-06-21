@@ -292,7 +292,7 @@ class Game {
     const loop = () => {
       ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
       ctx.font = '3vw Arial';
-      const txt = 'Chelix Jump';
+      const txt = 'Cheliks Jump';
       const x = canvas.clientWidth / 2 - (ctx.measureText(txt).width / 2);
       const y = canvas.clientHeight * 0.175;
       ctx.fillText(txt, x, y);
