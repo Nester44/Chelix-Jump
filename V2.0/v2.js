@@ -6,6 +6,14 @@ const ctx = canvas.getContext('2d');
 const startBtn = document.querySelector('.start-btn');
 const skins = document.querySelectorAll('.skin-bar__option');
 
+const rangeInputs = document.querySelectorAll('input[type=range]');
+
+const settingsSwitch = document.getElementById('auto-settings');
+
+const autoSettings = () => {
+  Array.from(rangeInputs).map((input) => input.disabled = !input.disabled);
+};
+
 const getSkinSrc = (value) => './images/skins/' + value + '.png';
 
 const adjustScreen = () => {
@@ -17,6 +25,50 @@ const adjustScreen = () => {
   }
 };
 
+const initSizes = {
+  screen: { width: 1440, height: 821 },
+  dood: {
+    width: 50,
+    height: 80,
+    accX: 1,
+    accY: 0.5,
+    jumpHeight: 15,
+    maxVel: 19,
+
+  },
+  plat: {
+    width: 120,
+    height: 20,
+    gap: 130,
+    speed: 1.3,
+  },
+};
+
+const getRelativeWidth = (width) => (
+  width / initSizes.screen.width * window.innerWidth
+);
+
+const getRelativeHeight = (height) => (
+  height / initSizes.screen.height * window.innerHeight
+);
+
+const getDimensions = () => ({
+  dood: {
+    width: getRelativeWidth(initSizes.dood.width),
+    height: getRelativeHeight(initSizes.dood.height),
+    accX: getRelativeWidth(initSizes.dood.accX),
+    accY: getRelativeHeight(initSizes.dood.accY),
+    jumpHeight: getRelativeHeight(initSizes.dood.jumpHeight),
+    maxVel: getRelativeWidth(initSizes.plat.width) - 1,
+  },
+  plat: {
+    width: getRelativeWidth(initSizes.plat.width),
+    height: getRelativeHeight(initSizes.plat.height),
+    gap: getRelativeHeight(initSizes.plat.gap),
+    speed: getRelativeHeight(initSizes.plat.speed),
+  }
+});
+
 const chooseSkin = (option) => {
   for (const skin of skins) {
     skin.id = '';
@@ -25,11 +77,6 @@ const chooseSkin = (option) => {
   window.game.dood.skin.src = getSkinSrc(option.value);
 };
 
-const getSettings = () => ({
-  platGap: Number(document.getElementById('gap').value),
-  platSpeed: Number(document.getElementById('speed').value),
-  hardmode: document.getElementById('hardmode').checked,
-});
 
 class Vector {
   constructor(x, y) {
@@ -47,17 +94,16 @@ class Vector {
 }
 
 class Platform {
-  constructor(y) {
-    this.width = Number(document.getElementById('width').value);
-    this.height = 20;
+  constructor(y, dimensions) {
+    this.width = dimensions.width;
+    this.height = dimensions.height;
     const x = Math.random() * (canvas.clientWidth - this.width);
     y =  canvas.clientHeight - y - this.height;
     this.position = new Vector(x, y);
 
     this.isMoving = false;
 
-    // getting random direction
-    this.vel = this.randomDirection(3);
+    this.vel = this.randomDirection(dimensions.height / 6);
   }
 
   randomDirection(velocity) {
@@ -75,9 +121,9 @@ class Platform {
 }
 
 class Doodler {
-  constructor(position) {
-    this.width = 50;
-    this.height = 80;
+  constructor(position, dimensions) {
+    this.width = dimensions.width;
+    this.height = dimensions.height;
 
     this.position = position;
     this.position.x -= this.width / 2;
@@ -89,14 +135,14 @@ class Doodler {
     this.isJump = false;
     this.isFall = false;
 
-    this.accY = 0.5;
+    this.accY = dimensions.accY;
     this.velY = 0;
 
     this.velX = 0;
     this.accX = 0;
-    this.acceleration = 1;
-    this.jumpHeight = Number(document.getElementById('height').value);
-    this.maxSpeed = 19;
+    this.acceleration = dimensions.accX;
+    this.jumpHeight = dimensions.jumpHeight;
+    this.maxVel = dimensions.maxVel;
 
     this.skin = new Image(50, 80);
     const choosenSkin = document.getElementById('selected').value;
@@ -106,7 +152,13 @@ class Doodler {
 
   drawDood() {
     ctx.beginPath();
-    ctx.drawImage(this.skin, this.position.x, this.position.y);
+    ctx.drawImage(this.skin, this.position.x,
+      this.position.y, this.width, this.height);
+    // ctx.rect(this.position.x, this.position.y, this.width, this.height);
+    ctx.strokeStyle = 'black';
+    ctx.stroke();
+    ctx.fillStyle = 'red';
+    ctx.fill();
   }
 
   drawSpeed() {
@@ -119,20 +171,46 @@ class Doodler {
 class Game {
   constructor() {
     this.defineSettings();
+
+    this.platGap = this.dimensions.plat.gap;
+    this.platSpeed = this.dimensions.plat.speed;
     this.platforms = [];
-    this.neededSpeed = 3;
+    this.neededSpeed = this.dimensions.plat.height / 5;
     this.moveHeight = canvas.height * 0.6;
 
     this.friction = 0.1;
+
+
 
     this.score = 0;
   }
 
   defineSettings() {
-    const { platGap, platSpeed, hardmode } = getSettings();
-    this.platGap = platGap;
-    this.platSpeed = platSpeed;
-    this.hardmode = hardmode;
+    if (settingsSwitch.checked) {
+      console.log('auto');
+      this.dimensions = getDimensions();
+    } else {
+      console.log('manual');
+      this.dimensions = initSizes;
+      console.log(this.dimensions);
+
+      // HAS TO BE DECOMPOSED
+      this.dimensions.plat.gap = Number(document.
+        getElementById('gap').value);
+      this.dimensions.plat.speed = Number(document.
+        getElementById('speed').value);
+      this.dimensions.plat.width = Number(document.
+        getElementById('width').value);
+      this.dimensions.dood.jumpHeight = Number(document.
+        getElementById('height').value);
+    }
+    this.hardmode = document.getElementById('hardmode').checked;
+
+
+    // const { platGap, platSpeed, hardmode } = getSettings();
+    // this.platGap = platGap;
+    // this.platSpeed = platSpeed;
+    // this.hardmode = hardmode;
   }
 
   drawScore() {
@@ -144,7 +222,7 @@ class Game {
   createPlat() {
     const platAmount = Math.round(ctx.canvas.height / this.platGap);
     for (let i = 1; i < platAmount + 1; i++) {
-      const plat = new Platform(this.platGap * i);
+      const plat = new Platform(this.platGap * i, this.dimensions.plat);
       // choosing mooving platforms
       if (this.hardmode) plat.isMoving = true;
       this.platforms.push(plat);
@@ -212,7 +290,7 @@ class Game {
     if (this.detColl()) {
       this.dood.velY = -this.dood.jumpHeight;
       this.score++;
-    } else if (this.dood.velY < this.dood.maxSpeed) {
+    } else if (this.dood.velY < this.dood.maxVel) {
       this.dood.velY += this.dood.accY;
     }
 
@@ -263,7 +341,7 @@ class Game {
     const firstPlat = this.platforms[0].position.dup();
     // get center of plat
     firstPlat.x += this.platforms[0].width / 2;
-    this.dood = new Doodler(firstPlat);
+    this.dood = new Doodler(firstPlat, this.dimensions.dood);
     console.log({
       gap: this.platGap,
       speed: this.platSpeed,
@@ -282,12 +360,12 @@ class Game {
   }
 
   mainScreen() {
-    const platform = new Platform(100);
+    const platform = new Platform(100, this.dimensions.plat);
     this.platforms.push(platform);
     platform.position.x = 100;
     const platPos = platform.position.dup();
     platPos.x += platform.width / 2;
-    const doodler = new Doodler(platPos);
+    const doodler = new Doodler(platPos, this.dimensions.dood);
     this.dood = doodler;
     const loop = () => {
       ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
@@ -304,19 +382,23 @@ class Game {
     requestAnimationFrame(loop.bind(this));
   }
 }
-
+window.game = new Game();
 adjustScreen();
+
 
 startBtn.addEventListener('click', () => {
   cancelAnimationFrame(window.game.animID);
   window.game = new Game();
   window.game.start();
 });
-window.game = new Game();
+
+
+settingsSwitch.addEventListener('click', () => autoSettings());
 
 skins.forEach((option) => {
   option.style.background = `url('${getSkinSrc(option.value)}')`;
   option.addEventListener('click', (option) => chooseSkin(option.target));
 });
+
 
 setTimeout(() => window.game.mainScreen(), 150);
