@@ -34,9 +34,23 @@
                         <label for="width">Platform width</label>
                         <input type="range" id="width" name="width" min="100" max="200" step="10" value="120">
                     </div>
-                    <div class="settings__option">
-                        <label for="hardmode">Hardmode</label>
-                        <input type="checkbox" id="hardmode" name="hardmode" value="1">
+                </div>
+                <div class="switchers">
+
+                    <div class="switchers__option">
+                        <label>Hard Mode</label>
+                        <label class="switch">
+                            <input type="checkbox" id="hardmode" name="hardmode">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+
+                    <div class="switchers__option">
+                        <label>Auto-settings</label>
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider round"></span>
+                        </label>
                     </div>
                 </div>
             </div>
