@@ -6,6 +6,14 @@ const ctx = canvas.getContext('2d');
 const startBtn = document.querySelector('.start-btn');
 const skins = document.querySelectorAll('.skin-bar__option');
 
+const rangeInputs = document.querySelectorAll('input[type=range]');
+
+const settingsSwitch = document.getElementById('auto-settings');
+
+const autoSettings = () => {
+  Array.from(rangeInputs).map((input) => input.disabled = !input.disabled);
+};
+
 const getSkinSrc = (value) => './images/skins/' + value + '.png';
 
 const adjustScreen = () => {
@@ -19,8 +27,21 @@ const adjustScreen = () => {
 
 const initSizes = {
   screen: { width: 1440, height: 821 },
-  dood: { width: 50, height: 80, accX: 1, accY: 0.5, jumpHeight: 15 },
-  plat: { width: 120, height: 20, gap: 130, speed: 1.3 },
+  dood: {
+    width: 50,
+    height: 80,
+    accX: 1,
+    accY: 0.5,
+    jumpHeight: 15,
+    maxVel: 19,
+
+  },
+  plat: {
+    width: 120,
+    height: 20,
+    gap: 130,
+    speed: 1.3,
+  },
 };
 
 const getRelativeWidth = (width) => (
@@ -32,7 +53,7 @@ const getRelativeHeight = (height) => (
 );
 
 const getDimensions = () => ({
-  doodler: {
+  dood: {
     width: getRelativeWidth(initSizes.dood.width),
     height: getRelativeHeight(initSizes.dood.height),
     accX: getRelativeWidth(initSizes.dood.accX),
@@ -40,7 +61,7 @@ const getDimensions = () => ({
     jumpHeight: getRelativeHeight(initSizes.dood.jumpHeight),
     maxVel: getRelativeWidth(initSizes.plat.width) - 1,
   },
-  platform: {
+  plat: {
     width: getRelativeWidth(initSizes.plat.width),
     height: getRelativeHeight(initSizes.plat.height),
     gap: getRelativeHeight(initSizes.plat.gap),
@@ -56,11 +77,6 @@ const chooseSkin = (option) => {
   window.game.dood.skin.src = getSkinSrc(option.value);
 };
 
-const getSettings = () => ({
-  platGap: Number(document.getElementById('gap').value),
-  platSpeed: Number(document.getElementById('speed').value),
-  hardmode: document.getElementById('hardmode').checked,
-});
 
 class Vector {
   constructor(x, y) {
@@ -136,8 +152,9 @@ class Doodler {
 
   drawDood() {
     ctx.beginPath();
-    // ctx.drawImage(this.skin, this.position.x, this.position.y);
-    ctx.rect(this.position.x, this.position.y, this.width, this.height);
+    ctx.drawImage(this.skin, this.position.x,
+      this.position.y, this.width, this.height);
+    // ctx.rect(this.position.x, this.position.y, this.width, this.height);
     ctx.strokeStyle = 'black';
     ctx.stroke();
     ctx.fillStyle = 'red';
@@ -153,15 +170,12 @@ class Doodler {
 
 class Game {
   constructor() {
-    // this.defineSettings();
-    this.dimensions = getDimensions();
+    this.defineSettings();
 
-    this.platGap = this.dimensions.platform.gap;
-    this.platSpeed = this.dimensions.platform.speed;
-    this.hardmode = false;
-
+    this.platGap = this.dimensions.plat.gap;
+    this.platSpeed = this.dimensions.plat.speed;
     this.platforms = [];
-    this.neededSpeed = this.dimensions.platform.height / 5;
+    this.neededSpeed = this.dimensions.plat.height / 5;
     this.moveHeight = canvas.height * 0.6;
 
     this.friction = 0.1;
@@ -172,10 +186,31 @@ class Game {
   }
 
   defineSettings() {
-    const { platGap, platSpeed, hardmode } = getSettings();
-    this.platGap = platGap;
-    this.platSpeed = platSpeed;
-    this.hardmode = hardmode;
+    if (settingsSwitch.checked) {
+      console.log('auto');
+      this.dimensions = getDimensions();
+    } else {
+      console.log('manual');
+      this.dimensions = initSizes;
+      console.log(this.dimensions);
+
+      // HAS TO BE DECOMPOSED
+      this.dimensions.plat.gap = Number(document.
+        getElementById('gap').value);
+      this.dimensions.plat.speed = Number(document.
+        getElementById('speed').value);
+      this.dimensions.plat.width = Number(document.
+        getElementById('width').value);
+      this.dimensions.dood.jumpHeight = Number(document.
+        getElementById('height').value);
+    }
+    this.hardmode = document.getElementById('hardmode').checked;
+
+
+    // const { platGap, platSpeed, hardmode } = getSettings();
+    // this.platGap = platGap;
+    // this.platSpeed = platSpeed;
+    // this.hardmode = hardmode;
   }
 
   drawScore() {
@@ -187,7 +222,7 @@ class Game {
   createPlat() {
     const platAmount = Math.round(ctx.canvas.height / this.platGap);
     for (let i = 1; i < platAmount + 1; i++) {
-      const plat = new Platform(this.platGap * i, this.dimensions.platform);
+      const plat = new Platform(this.platGap * i, this.dimensions.plat);
       // choosing mooving platforms
       if (this.hardmode) plat.isMoving = true;
       this.platforms.push(plat);
@@ -306,7 +341,7 @@ class Game {
     const firstPlat = this.platforms[0].position.dup();
     // get center of plat
     firstPlat.x += this.platforms[0].width / 2;
-    this.dood = new Doodler(firstPlat, this.dimensions.doodler);
+    this.dood = new Doodler(firstPlat, this.dimensions.dood);
     console.log({
       gap: this.platGap,
       speed: this.platSpeed,
@@ -325,12 +360,12 @@ class Game {
   }
 
   mainScreen() {
-    const platform = new Platform(100, this.dimensions.platform);
+    const platform = new Platform(100, this.dimensions.plat);
     this.platforms.push(platform);
     platform.position.x = 100;
     const platPos = platform.position.dup();
     platPos.x += platform.width / 2;
-    const doodler = new Doodler(platPos, this.dimensions.doodler);
+    const doodler = new Doodler(platPos, this.dimensions.dood);
     this.dood = doodler;
     const loop = () => {
       ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
@@ -347,8 +382,9 @@ class Game {
     requestAnimationFrame(loop.bind(this));
   }
 }
-
+window.game = new Game();
 adjustScreen();
+
 
 startBtn.addEventListener('click', () => {
   cancelAnimationFrame(window.game.animID);
@@ -356,10 +392,13 @@ startBtn.addEventListener('click', () => {
   window.game.start();
 });
 
+
+settingsSwitch.addEventListener('click', () => autoSettings());
+
 skins.forEach((option) => {
   option.style.background = `url('${getSkinSrc(option.value)}')`;
   option.addEventListener('click', (option) => chooseSkin(option.target));
 });
 
-window.game = new Game();
+
 setTimeout(() => window.game.mainScreen(), 150);
