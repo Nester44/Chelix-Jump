@@ -17,6 +17,30 @@ const adjustScreen = () => {
   }
 };
 
+const initSizes = {
+  screen: { width: 1440, height: 821 },
+  dood: { width: 50, height: 80, accX: 1, accY: 0.5 },
+  plat: { height: 20, },
+};
+
+const getRelativeWidth = (width) => (
+  width / initSizes.screen.width * window.innerWidth
+);
+
+const getRelativeHeight = (height) => (
+  height / initSizes.screen.height * window.innerHeight
+);
+
+const getDimensions = () => ({
+  doodler: {
+    width: getRelativeWidth(initSizes.dood.width),
+    height: getRelativeHeight(initSizes.dood.height),
+    accX: getRelativeWidth(initSizes.dood.accX),
+    accY: getRelativeHeight(initSizes.dood.accY),
+  },
+  platform: { height: getRelativeHeight(initSizes.plat.height) }
+});
+
 const chooseSkin = (option) => {
   for (const skin of skins) {
     skin.id = '';
@@ -47,9 +71,9 @@ class Vector {
 }
 
 class Platform {
-  constructor(y) {
+  constructor(y, dimensions) {
     this.width = Number(document.getElementById('width').value);
-    this.height = 20;
+    this.height = dimensions.height;
     const x = Math.random() * (canvas.clientWidth - this.width);
     y =  canvas.clientHeight - y - this.height;
     this.position = new Vector(x, y);
@@ -75,9 +99,9 @@ class Platform {
 }
 
 class Doodler {
-  constructor(position) {
-    this.width = 50;
-    this.height = 80;
+  constructor(position, dimensions) {
+    this.width = dimensions.width;
+    this.height = dimensions.height;
 
     this.position = position;
     this.position.x -= this.width / 2;
@@ -89,14 +113,14 @@ class Doodler {
     this.isJump = false;
     this.isFall = false;
 
-    this.accY = 0.5;
+    this.accY = dimensions.accY;
     this.velY = 0;
 
     this.velX = 0;
     this.accX = 0;
-    this.acceleration = 1;
+    this.acceleration = dimensions.accX;
     this.jumpHeight = Number(document.getElementById('height').value);
-    this.maxSpeed = 19;
+    this.maxVel = 19;
 
     this.skin = new Image(50, 80);
     const choosenSkin = document.getElementById('selected').value;
@@ -106,7 +130,12 @@ class Doodler {
 
   drawDood() {
     ctx.beginPath();
-    ctx.drawImage(this.skin, this.position.x, this.position.y);
+    // ctx.drawImage(this.skin, this.position.x, this.position.y);
+    ctx.rect(this.position.x, this.position.y, this.width, this.height);
+    ctx.strokeStyle = 'black';
+    ctx.stroke();
+    ctx.fillStyle = 'red';
+    ctx.fill();
   }
 
   drawSpeed() {
@@ -124,6 +153,8 @@ class Game {
     this.moveHeight = canvas.height * 0.6;
 
     this.friction = 0.1;
+
+    this.dimensions = getDimensions();
 
     this.score = 0;
   }
@@ -144,7 +175,7 @@ class Game {
   createPlat() {
     const platAmount = Math.round(ctx.canvas.height / this.platGap);
     for (let i = 1; i < platAmount + 1; i++) {
-      const plat = new Platform(this.platGap * i);
+      const plat = new Platform(this.platGap * i, this.dimensions.platform);
       // choosing mooving platforms
       if (this.hardmode) plat.isMoving = true;
       this.platforms.push(plat);
@@ -212,7 +243,7 @@ class Game {
     if (this.detColl()) {
       this.dood.velY = -this.dood.jumpHeight;
       this.score++;
-    } else if (this.dood.velY < this.dood.maxSpeed) {
+    } else if (this.dood.velY < this.dood.maxVel) {
       this.dood.velY += this.dood.accY;
     }
 
@@ -263,7 +294,7 @@ class Game {
     const firstPlat = this.platforms[0].position.dup();
     // get center of plat
     firstPlat.x += this.platforms[0].width / 2;
-    this.dood = new Doodler(firstPlat);
+    this.dood = new Doodler(firstPlat, this.dimensions.doodler);
     console.log({
       gap: this.platGap,
       speed: this.platSpeed,
@@ -282,12 +313,12 @@ class Game {
   }
 
   mainScreen() {
-    const platform = new Platform(100);
+    const platform = new Platform(100, this.dimensions.platform);
     this.platforms.push(platform);
     platform.position.x = 100;
     const platPos = platform.position.dup();
     platPos.x += platform.width / 2;
-    const doodler = new Doodler(platPos);
+    const doodler = new Doodler(platPos, this.dimensions.doodler);
     this.dood = doodler;
     const loop = () => {
       ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
@@ -312,11 +343,11 @@ startBtn.addEventListener('click', () => {
   window.game = new Game();
   window.game.start();
 });
-window.game = new Game();
 
 skins.forEach((option) => {
   option.style.background = `url('${getSkinSrc(option.value)}')`;
   option.addEventListener('click', (option) => chooseSkin(option.target));
 });
 
+window.game = new Game();
 setTimeout(() => window.game.mainScreen(), 150);
