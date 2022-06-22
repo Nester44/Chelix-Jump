@@ -19,8 +19,8 @@ const adjustScreen = () => {
 
 const initSizes = {
   screen: { width: 1440, height: 821 },
-  dood: { width: 50, height: 80, accX: 1, accY: 0.5 },
-  plat: { height: 20, },
+  dood: { width: 50, height: 80, accX: 1, accY: 0.5, jumpHeight: 15 },
+  plat: { width: 120, height: 20, gap: 130, speed: 1.3 },
 };
 
 const getRelativeWidth = (width) => (
@@ -37,8 +37,15 @@ const getDimensions = () => ({
     height: getRelativeHeight(initSizes.dood.height),
     accX: getRelativeWidth(initSizes.dood.accX),
     accY: getRelativeHeight(initSizes.dood.accY),
+    jumpHeight: getRelativeHeight(initSizes.dood.jumpHeight),
+    maxVel: getRelativeWidth(initSizes.plat.width) - 1,
   },
-  platform: { height: getRelativeHeight(initSizes.plat.height) }
+  platform: {
+    width: getRelativeWidth(initSizes.plat.width),
+    height: getRelativeHeight(initSizes.plat.height),
+    gap: getRelativeHeight(initSizes.plat.gap),
+    speed: getRelativeHeight(initSizes.plat.speed),
+  }
 });
 
 const chooseSkin = (option) => {
@@ -72,7 +79,7 @@ class Vector {
 
 class Platform {
   constructor(y, dimensions) {
-    this.width = Number(document.getElementById('width').value);
+    this.width = dimensions.width;
     this.height = dimensions.height;
     const x = Math.random() * (canvas.clientWidth - this.width);
     y =  canvas.clientHeight - y - this.height;
@@ -80,8 +87,7 @@ class Platform {
 
     this.isMoving = false;
 
-    // getting random direction
-    this.vel = this.randomDirection(3);
+    this.vel = this.randomDirection(dimensions.height / 6);
   }
 
   randomDirection(velocity) {
@@ -119,8 +125,8 @@ class Doodler {
     this.velX = 0;
     this.accX = 0;
     this.acceleration = dimensions.accX;
-    this.jumpHeight = Number(document.getElementById('height').value);
-    this.maxVel = 19;
+    this.jumpHeight = dimensions.jumpHeight;
+    this.maxVel = dimensions.maxVel;
 
     this.skin = new Image(50, 80);
     const choosenSkin = document.getElementById('selected').value;
@@ -147,14 +153,20 @@ class Doodler {
 
 class Game {
   constructor() {
-    this.defineSettings();
+    // this.defineSettings();
+    this.dimensions = getDimensions();
+
+    this.platGap = this.dimensions.platform.gap;
+    this.platSpeed = this.dimensions.platform.speed;
+    this.hardmode = false;
+
     this.platforms = [];
-    this.neededSpeed = 3;
+    this.neededSpeed = this.dimensions.platform.height / 5;
     this.moveHeight = canvas.height * 0.6;
 
     this.friction = 0.1;
 
-    this.dimensions = getDimensions();
+
 
     this.score = 0;
   }
