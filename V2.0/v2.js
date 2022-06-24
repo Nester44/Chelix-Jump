@@ -5,20 +5,20 @@ const ctx = canvas.getContext('2d');
 
 const startBtn = document.querySelector('.start-btn');
 const skins = document.querySelectorAll('.skin-bar__option');
-
 const rangeInputs = document.querySelectorAll('input[type=range]');
-
 const settingsSwitch = document.getElementById('auto-settings');
 
 const autoSettings = () => {
-  Array.from(rangeInputs).map((input) => input.disabled = !input.disabled);
+  Array.from(rangeInputs).forEach((input) => input.disabled = !input.disabled);
 };
 
 const getSkinSrc = (value) => './images/skins/' + value + '.png';
 
 const adjustScreen = () => {
+  // adjusting gameScreen height to 85% of window height
   canvas.height = window.innerHeight * 0.85;
-  if (window.innerWidth >= 600) {
+  if (window.innerWidth >= 600) { // 600px - min width when all panels fit
+  // adjusting gameScreen height to 85% of window height
     canvas.width = window.innerWidth * 0.45;
   } else {
     canvas.width = window.innerWidth * 0.85;
@@ -34,7 +34,6 @@ const initSizes = {
     accY: 0.5,
     jumpHeight: 15,
     maxVel: 19,
-
   },
   plat: {
     width: 120,
@@ -59,7 +58,7 @@ const getDimensions = () => ({
     accX: getRelativeWidth(initSizes.dood.accX),
     accY: getRelativeHeight(initSizes.dood.accY),
     jumpHeight: getRelativeHeight(initSizes.dood.jumpHeight),
-    maxVel: getRelativeWidth(initSizes.plat.width) - 1,
+    maxVel: getRelativeHeight(initSizes.plat.height) - 1,
   },
   plat: {
     width: getRelativeWidth(initSizes.plat.width),
@@ -77,6 +76,7 @@ const chooseSkin = (option) => {
   window.game.dood.skin.src = getSkinSrc(option.value);
 };
 
+const getValueById = (id) => Number(document.getElementById(id).value);
 
 class Vector {
   constructor(x, y) {
@@ -147,14 +147,12 @@ class Doodler {
     this.skin = new Image(50, 80);
     const choosenSkin = document.getElementById('selected').value;
     this.skin.src = getSkinSrc(choosenSkin);
-
   }
 
   drawDood() {
     ctx.beginPath();
-    ctx.drawImage(this.skin, this.position.x,
-      this.position.y, this.width, this.height);
-    // ctx.rect(this.position.x, this.position.y, this.width, this.height);
+    ctx.drawImage(this.skin, this.position.x, this.position.y,
+      this.width, this.height);
     ctx.strokeStyle = 'black';
     ctx.stroke();
     ctx.fillStyle = 'red';
@@ -177,10 +175,7 @@ class Game {
     this.platforms = [];
     this.neededSpeed = this.dimensions.plat.height / 5;
     this.moveHeight = canvas.height * 0.6;
-
     this.friction = 0.1;
-
-
 
     this.score = 0;
   }
@@ -192,25 +187,15 @@ class Game {
     } else {
       console.log('manual');
       this.dimensions = initSizes;
-      console.log(this.dimensions);
 
-      // HAS TO BE DECOMPOSED
-      this.dimensions.plat.gap = Number(document.
-        getElementById('gap').value);
-      this.dimensions.plat.speed = Number(document.
-        getElementById('speed').value);
-      this.dimensions.plat.width = Number(document.
-        getElementById('width').value);
-      this.dimensions.dood.jumpHeight = Number(document.
-        getElementById('height').value);
+      this.dimensions.plat.gap = getValueById('gap');
+      this.dimensions.plat.speed = getValueById('speed');
+      this.dimensions.plat.width = getValueById('width');
+      this.dimensions.dood.jumpHeight = getValueById('height');
     }
     this.hardmode = document.getElementById('hardmode').checked;
 
-
-    // const { platGap, platSpeed, hardmode } = getSettings();
-    // this.platGap = platGap;
-    // this.platSpeed = platSpeed;
-    // this.hardmode = hardmode;
+    console.log(this.dimensions);
   }
 
   drawScore() {
@@ -327,7 +312,6 @@ class Game {
       p.drawPlat();
       this.moveDownPlat();
     });
-    this.keyControl();
     this.move();
     this.movePlatX();
     this.dood.drawDood();
@@ -337,17 +321,12 @@ class Game {
 
   start() {
     this.createPlat();
+    this.keyControl();
 
     const firstPlat = this.platforms[0].position.dup();
     // get center of plat
     firstPlat.x += this.platforms[0].width / 2;
     this.dood = new Doodler(firstPlat, this.dimensions.dood);
-    console.log({
-      gap: this.platGap,
-      speed: this.platSpeed,
-      hardmode: this.hardmode,
-      jumpHeight: this.dood.jumpHeight,
-    });
     this.animID = requestAnimationFrame(this.mainLoop.bind(this));
   }
 
@@ -382,9 +361,10 @@ class Game {
     requestAnimationFrame(loop.bind(this));
   }
 }
-window.game = new Game();
-adjustScreen();
 
+adjustScreen();
+window.game = new Game();
+window.game.mainScreen();
 
 startBtn.addEventListener('click', () => {
   cancelAnimationFrame(window.game.animID);
@@ -392,13 +372,10 @@ startBtn.addEventListener('click', () => {
   window.game.start();
 });
 
-
+// input handlers
 settingsSwitch.addEventListener('click', () => autoSettings());
 
 skins.forEach((option) => {
   option.style.background = `url('${getSkinSrc(option.value)}')`;
   option.addEventListener('click', (option) => chooseSkin(option.target));
 });
-
-
-setTimeout(() => window.game.mainScreen(), 150);
