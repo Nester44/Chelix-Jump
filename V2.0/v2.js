@@ -178,6 +178,7 @@ class Game {
     this.friction = 0.1;
 
     this.score = 0;
+    this.over = false;
   }
 
   defineSettings() {
@@ -291,7 +292,9 @@ class Game {
     }
 
     // gameOver check
-    if (this.dood.position.y >= ctx.canvas.height) this.gameOver();
+    if (this.dood.position.y >= ctx.canvas.height) {
+      this.gameOver();
+    }
   }
 
   keyControl() {
@@ -307,6 +310,7 @@ class Game {
   }
 
   mainLoop() {
+    if (this.over) return cancelAnimationFrame(this.animID);
     ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
     this.platforms.forEach((p) => {
       p.drawPlat();
@@ -331,7 +335,7 @@ class Game {
   }
 
   gameOver() {
-    cancelAnimationFrame(this.animID);
+    this.over = true;
     ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
     const txt = 'Game Over';
     const x = canvas.width / 2 - (ctx.measureText(txt).width / 2);
@@ -356,9 +360,9 @@ class Game {
       this.move();
       doodler.drawDood();
       platform.drawPlat();
-      requestAnimationFrame(loop.bind(this));
+      this.animID = requestAnimationFrame(loop.bind(this));
     };
-    requestAnimationFrame(loop.bind(this));
+    this.animID = requestAnimationFrame(loop.bind(this));
   }
 }
 
