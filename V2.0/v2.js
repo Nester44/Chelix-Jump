@@ -7,6 +7,24 @@ const startBtn = document.querySelector('.start-btn');
 const skins = document.querySelectorAll('.skin-bar__option');
 const rangeInputs = document.querySelectorAll('input[type=range]');
 const settingsSwitch = document.getElementById('auto-settings');
+const musicSwitcher = document.getElementById('music-switcher');
+
+const gameMusic = new Audio('../sounds/gameMusic.mp3');
+const menuMusic = new Audio('../sounds/menuMusic.mp3');
+
+musicSwitcher.onclick = () => {
+  gameMusic.pause();
+  menuMusic.pause();
+};
+
+menuMusic.volume = 0.1;
+gameMusic.volume = 0.1;
+
+const changeMusic = (musicToStart, musicToStop) => {
+  if (!musicSwitcher.checked) return;
+  musicToStop.pause();
+  musicToStart.play();
+};
 
 const autoSettings = () => {
   Array.from(rangeInputs).forEach((input) => input.disabled = !input.disabled);
@@ -18,7 +36,7 @@ const adjustScreen = () => {
   // adjusting gameScreen height to 85% of window height
   canvas.height = window.innerHeight * 0.85;
   if (window.innerWidth >= 600) { // 600px - min width when all panels fit
-  // adjusting gameScreen height to 85% of window height
+    // adjusting gameScreen height to 85% of window height
     canvas.width = window.innerWidth * 0.45;
   } else {
     canvas.width = window.innerWidth * 0.85;
@@ -98,7 +116,7 @@ class Platform {
     this.width = dimensions.width;
     this.height = dimensions.height;
     const x = Math.random() * (canvas.clientWidth - this.width);
-    y =  canvas.clientHeight - y - this.height;
+    y = canvas.clientHeight - y - this.height;
     this.position = new Vector(x, y);
 
     this.isMoving = false;
@@ -218,7 +236,7 @@ class Game {
   movePlatX() {
     this.platforms.filter((plat) => plat.isMoving).forEach((plat) => {
       if (plat.position.x <= 0 ||
-          plat.position.x + plat.width >= ctx.canvas.width) {
+        plat.position.x + plat.width >= ctx.canvas.width) {
         plat.vel = -plat.vel;
       }
       plat.position.x += plat.vel;
@@ -324,6 +342,7 @@ class Game {
   }
 
   start() {
+    changeMusic(gameMusic, menuMusic);
     this.createPlat();
     this.keyControl();
 
@@ -335,6 +354,7 @@ class Game {
   }
 
   gameOver() {
+    changeMusic(menuMusic, gameMusic);
     this.over = true;
     ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
     const txt = 'Game Over';
