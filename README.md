@@ -1,7 +1,7 @@
 # Cheliks-Jump
 Cheliks Jump is a platforming video game.
 
-The game has been developed as a first-year coursework in the software engineering major. The task was to develop a project in pure JavaScript without using external libraries and frameworks.
+The game has been developed as a coursework in the software engineering major. The task was to develop a project in pure JavaScript without using external libraries and frameworks.
 
 In Cheliks Jump, the aim is to guide the creature called "The Cheliks" up a never-ending series of platforms without falling. The left side of the playing field is connected with the right side.
 
