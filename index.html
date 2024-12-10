@@ -2,53 +2,84 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Doodle jump</title>
-    <link rel="stylesheet" href="./css/styles.css">
-    <link rel="icon" type="image/x-icon" href="img/favicon-16x16.png">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Cheliks jump</title>
+	<link rel="stylesheet" href="./index.css">
+	<link rel="icon" type="image/x-icon" href="../img/favicon-16x16.png">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
-    <div class="conatiner">
-        <a href="./V2.0/v2.html" class="alink">Engine powered version 2.0</a>
-        <div class="wrap">
-            <div class="wrapper">
-                <div class="title">Select difficult</div>
-                <div class="box">
-                    <input type="radio" name="level" id="option-1" value="easy">
-                    <input type="radio" name="level" id="option-2" value="medium">
-                    <input type="radio" name="level" id="option-3" value="hard">
-                    <label for="option-1" class="option-1">
-                        <div class="dot"></div>
-                        <div class="text">Easy</div>
-                    </label>
-                    <label for="option-2" class="option-2">
-                        <div class="dot"></div>
-                        <div class="text">Medium</div>
-                    </label>
-                    <label for="option-3" class="option-3">
-                        <div class="dot"></div>
-                        <div class="text">Hard</div>
-                    </label>
-                    <button id="apply-btn">
-                        <div class="text">Apply</div>
-                    </button>
-                </div>
-            </div>
-            <div class="grid">
-                <div id="score"></div>
-            </div>
-        </div>
-        <button class="start-btn">Start game</button>
-        <div class="container__row">
-            <button class="settings-btn"></button>
-            <button class="off play-music"></button>
-        </div>
-    </div>
-    <a href="https://github.com/Nester44/Doodle-Jump" class="code-link"><img src="./img/github-icon.png" alt=""></a>
-    <script src="./src/index.js"></script>
+	<div class="wrapper">
+		<div class="main-row">
+			<div class="panel settings">
+				<h2 class="settings__title title">Settings</h2>
+				<div class="settings__options">
+					<div class="settings__option">
+						<label for="gap">Platform gap</label>
+						<input disabled type="range" id="gap" name="gap" min="100" max="250" step="30" value="130">
+					</div>
+					<div class="settings__option">
+						<label for="speed">Platform speed</label>
+						<input disabled type="range" id="speed" name="speed" min="0.5" max="3" step="0.1" value="1.3">
+					</div>
+					<div class="settings__option">
+						<label for="height">Jump height</label>
+						<input disabled type="range" id="height" name="height" min="15" max="25" step="1" value="15">
+					</div>
+					<div class="settings__option">
+						<label for="width">Platform width</label>
+						<input disabled type="range" id="width" name="width" min="100" max="200" step="10" value="120">
+					</div>
+				</div>
+				<div class="switchers">
 
+					<div class="switchers__option">
+						<label>Hard Mode</label>
+						<label class="switch">
+							<input type="checkbox" id="hardmode" name="hardmode">
+							<span class="slider round"></span>
+						</label>
+					</div>
+
+					<div class="switchers__option">
+						<label>Auto-settings</label>
+						<label class="switch">
+							<input type="checkbox" id="auto-settings" checked>
+							<span class="slider round"></span>
+						</label>
+					</div>
+
+					<div class="switchers__option">
+						<label>Music</label>
+						<label class="switch">
+							<input type="checkbox" id="music-switcher" checked>
+							<span class="slider round"></span>
+						</label>
+					</div>
+				</div>
+			</div>
+			<canvas id="canvas" tabindex="0" width="600" height="700"></canvas>
+			<div class="panel skin-bar">
+				<h2 class="skin-bar__title title">Select cheliks</h2>
+				<div class="skin-bar__options">
+					<input type="button" value="oleg" id="selected" class="skin-bar__option">
+					<input type="button" value="gordon" class="skin-bar__option">
+					<input type="button" value="patrick" class="skin-bar__option">
+					<input type="button" value="papich1" class="skin-bar__option">
+					<input type="button" value="van" class="skin-bar__option">
+					<input type="button" value="shems" class="skin-bar__option">
+					<input type="button" value="fight" class="skin-bar__option">
+					<input type="button" value="derden" class="skin-bar__option">
+				</div>
+			</div>
+		</div>
+		<button class="start-btn">Start Game</button>
+		<script src="index.js"></script>
+	</div>
 </body>
 
 </html>

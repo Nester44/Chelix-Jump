@@ -1,5 +1,3 @@
-'use strict';
-
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
@@ -9,8 +7,8 @@ const rangeInputs = document.querySelectorAll('input[type=range]');
 const settingsSwitch = document.getElementById('auto-settings');
 const musicSwitcher = document.getElementById('music-switcher');
 
-const gameMusic = new Audio('../sounds/gameMusic.mp3');
-const menuMusic = new Audio('../sounds/menuMusic.mp3');
+const gameMusic = new Audio('./sounds/gameMusic.mp3');
+const menuMusic = new Audio('./sounds/menuMusic.mp3');
 
 musicSwitcher.onclick = () => {
   gameMusic.pause();
